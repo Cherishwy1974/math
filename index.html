@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高等数学知识体系</title>
+    <!-- 核心样式 -->
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --text-color: #333;
+            --border-color: #ddd;
+            --background-color: #f8f9fa;
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', 'Heiti SC', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition-speed);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* 主内容区样式 */
+        .main-content {
+            padding: 40px 0;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 30px 20px;
+            background-color: white;
+            margin-bottom: 40px;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .hero-title {
+            font-size: 2.2em;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        .hero-description {
+            font-size: 1.1em;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 20px;
+        }
+
+        /* 体系结构样式 */
+        .system-structure {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .volume {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        }
+
+        .volume:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .volume-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .volume-content {
+            padding: 20px;
+        }
+
+        .chapter-list {
+            list-style: none;
+        }
+
+        .chapter-item {
+            margin-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 12px;
+        }
+
+        .chapter-item:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .chapter-link {
+            display: block;
+            color: var(--secondary-color);
+            text-decoration: none;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: all var(--transition-speed);
+        }
+
+        .chapter-link:hover {
+            background-color: #f0f7fc;
+            color: var(--primary-color);
+            padding-left: 15px;
+        }
+
+        .chapter-link i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        /* 顶部指示器 */
+        .loading-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background-color: var(--primary-color);
+            z-index: 9999;
+            width: 0;
+            transition: width 0.5s ease-out;
+        }
+
+        /* 页脚样式 */
+        .footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .footer-links li {
+            margin: 0 15px;
+        }
+
+        .footer-links a {
+            color: var(--light-color);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .copyright {
+            font-size: 0.9em;
+            color: #bdc3c7;
+        }
+
+        /* 响应式布局 */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 1.8em;
+            }
+
+            .hero-description {
+                font-size: 1em;
+            }
+
+            .nav-container {
+                flex-direction: column;
+            }
+
+            .nav-links {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links li {
+                margin: 5px 10px;
+            }
+
+            .system-structure {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.6em;
+            }
+        }
+
+        /* 额外美化 */
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-left: 8px;
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .badge.new {
+            background-color: var(--accent-color);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+    <!-- 字体图标（本地引用） -->
+    <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
+</head>
+
+<body>
+    <!-- 加载指示器 -->
+    <div class="loading-bar" id="loadingBar"></div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">高等数学知识体系</a>
+            <ul class="nav-links">
+                <li><a href="#"><i class="fas fa-home"></i> 首页</a></li>
+                <li><a href="#"><i class="fas fa-book"></i> 学习资源</a></li>
+                <li><a href="#"><i class="fas fa-question-circle"></i> 常见问题</a></li>
+                <li><a href="#"><i class="fas fa-user"></i> 个人中心</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="container">
+            <!-- 主体系结构 -->
+            <div class="system-structure">
+                <!-- 卷一：微分篇 -->
+                <div class="volume">
+                    <div class="volume-header">
+                        <i class="fas fa-calculator"></i> 卷一：微分篇
+                    </div>
+                    <div class="volume-content">
+                        <ul class="chapter-list">
+                            <li class="chapter-item">
+                                <a href="#" class="chapter-link">
+                                    <i class="fas fa-angle-right"></i> 第一章：代数与函数
+                                </a>
+                            </li>
+                            <li class="chapter-item">
+                                <a href="#" class="chapter-link">
+                                    <i class="fas fa-angle-right"></i> 第二章：极限与连续
+                                </a>
+                            </li>
+                            <li class="chapter-item">
+                                <a href="#" class="chapter-link">
+                                    <i class="fas fa-angle-right"></i> 第三章：导数与微分
+                                </a>
+                            </li>
+                            <li class="chapter-item">
+                                <a href="#" class="chapter-link">
+                                    <i class="fas fa-angle-right"></i> 第四章：导数的应用
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 卷二：积分篇 -->
+                <div class="volume">
+                    <div class="volume-header">
+                        <i class="fas fa-integral"></i> 卷二：积分篇
+                    </div>
+                    <div class="volume-content">
+                        <ul class="chapter-list">
+                            <li class="chapter-item">
+                                <a href="assets/indefinite-integral.html" class="chapter-link">
+                                    <i class="fas fa-angle-right"></i> 第五章：不定积分
+                                    <span class="badge">热门</span>
+                                </a>
+                            </li>
+                            <li class="chapter-item">
+                                <a href="assets/definite-integral.html" class="chapter-link">
+                                    <i class="fas fa-angle-right"></i> 第六章：定积分及其应用
+                                </a>
+                            </li>
+                            <li class="chapter-item">
+                                <a href="assets/differential-equation.html" class="chapter-link">
+                                    <i class="fas fa-angle-right"></i> 第七章：常微分方程
+                                    <span class="badge new">更新</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 卷三：多元微积分篇 -->
+                <div class="volume">
+                    <div class="volume-header">
+                        <i class="fas fa-cubes"></i> 卷三：多元微积分篇
+                    </div>
+                    <div class="volume-content">
+                        <ul class="chapter-list">
+                            <li class="chapter-item">
+                                <a href="#" class="chapter-link">
+                                    <i class="fas fa-angle-right"></i> 第八章：多元函数微分学
+                                </a>
+                            </li>
+                            <li class="chapter-item">
+                                <a href="#" class="chapter-link">
+                                    <i class="fas fa-angle-right"></i> 第九章：多元函数积分学初步
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 卷四：代数篇 -->
+                <div class="volume">
+                    <div class="volume-header">
+                        <i class="fas fa-square-root-alt"></i> 卷四：代数篇
+                    </div>
+                    <div class="volume-content">
+                        <ul class="chapter-list">
+                            <li class="chapter-item">
+                                <a href="#" class="chapter-link">
+                                    <i class="fas fa-angle-right"></i> 第十章：线性代数初步
+                                </a>
+                            </li>
+                            <li class="chapter-item">
+                                <a href="#" class="chapter-link">
+                                    <i class="fas fa-angle-right"></i> 第十一章：无穷级数
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 卷五：空间几何篇 -->
+                <div class="volume">
+                    <div class="volume-header">
+                        <i class="fas fa-cube"></i> 卷五：空间几何篇
+                    </div>
+                    <div class="volume-content">
+                        <ul class="chapter-list">
+                            <li class="chapter-item">
+                                <a href="#" class="chapter-link">
+                                    <i class="fas fa-angle-right"></i> 第十二章：向量代数与空间解析几何
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 卷六：概率统计篇 -->
+                <div class="volume">
+                    <div class="volume-header">
+                        <i class="fas fa-chart-bar"></i> 卷六：概率统计篇
+                    </div>
+                    <div class="volume-content">
+                        <ul class="chapter-list">
+                            <li class="chapter-item">
+                                <a href="#" class="chapter-link">
+                                    <i class="fas fa-angle-right"></i> 第十三章：概率论与数理统计初步
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <ul class="footer-links">
+                    <li><a href="#">关于我们</a></li>
+                    <li><a href="#">隐私政策</a></li>
+                    <li><a href="#">联系方式</a></li>
+                </ul>
+                <p class="copyright">© 2023-2025 高等数学知识体系 | 保留所有权利</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 页面加载完成后移除加载指示器
+        document.addEventListener('DOMContentLoaded', function () {
+            // 模拟加载进度
+            const loadingBar = document.getElementById('loadingBar');
+            let width = 0;
+            const interval = setInterval(function () {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    setTimeout(function () {
+                        loadingBar.style.opacity = '0';
+                        setTimeout(function () {
+                            loadingBar.style.display = 'none';
+                        }, 300);
+                    }, 500);
+                } else {
+                    width += Math.random() * 10;
+                    if (width > 100) width = 100;
+                    loadingBar.style.width = width + '%';
+                }
+            }, 100);
+        });
+
+        // 预加载常用页面
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(function () {
+                const links = [
+                    'assets/indefinite-integral.html',
+                    'assets/definite-integral.html',
+                    'assets/differential-equation.html'
+                ];
+
+                links.forEach(function (link) {
+                    const prefetcher = document.createElement('link');
+                    prefetcher.rel = 'prefetch';
+                    prefetcher.href = link;
+                    document.head.appendChild(prefetcher);
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>
