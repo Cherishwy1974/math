@@ -1026,11 +1026,11 @@ function applyFilter(category) {
     requestAnimationFrame(() => {
         // 获取所有习题元素
         const exerciseItems = document.querySelectorAll('.exercise-item');
-        
+
         // 使用DocumentFragment来批量处理DOM操作
         const fragment = document.createDocumentFragment();
         const container = document.getElementById('exercise-container');
-        
+
         // 如果是'all'分类，直接显示所有题目
         if (category === 'all') {
             exerciseItems.forEach(item => {
@@ -1046,19 +1046,19 @@ function applyFilter(category) {
                 'linear-first': '一阶线性微分方程',
                 'linear-second': '二阶常系数线性微分方程'
             };
-            
+
             const targetCategory = categoryMap[category];
-            
+
             // 使用数组方法代替循环来提高效率
             exerciseItems.forEach(item => {
                 const itemCategory = item.getAttribute('data-category');
                 const shouldShow = targetCategory ? itemCategory.includes(targetCategory) : true;
-                
+
                 item.style.display = shouldShow ? 'block' : 'none';
                 if (shouldShow) visibleCount++;
             });
         }
-        
+
         // 更新计数显示
         const exerciseCountElement = document.getElementById('exercise-count');
         if (exerciseCountElement) {
@@ -1069,13 +1069,13 @@ function applyFilter(category) {
                 statsNumberElements[0].textContent = visibleCount;
             }
         }
-        
+
         // 显示或隐藏无结果提示
         const noResultsMessage = document.getElementById('no-results-message');
         if (noResultsMessage) {
             noResultsMessage.style.display = visibleCount === 0 ? 'block' : 'none';
         }
-        
+
         // 延迟更新按钮计数，以减少主线程负担
         setTimeout(() => updateFilterButtonCounts(), 50);
     });
@@ -1720,15 +1720,15 @@ function bindAiAnalysisButtons() {
 
 function renderKnowledgeSection() {
     console.log('渲染知识点部分...');
-    
+
     // 使用幻灯片方式渲染知识点
     initSlides();
-    
+
     // 设置圆形导航按钮点击事件
     setupCircleNavigation();
-    
+
     console.log('知识点幻灯片渲染完成');
-    
+
     // 为知识点区域添加事件委托
     const knowledgeSection = document.querySelector('.knowledge-section');
     if (knowledgeSection) {
@@ -1742,7 +1742,7 @@ function renderKnowledgeSection() {
             }
         });
     }
-    
+
     // 在渲染完毕后，确保MathJax渲染公式
     setTimeout(() => {
         const slides = document.querySelectorAll('.slide');
@@ -2074,6 +2074,7 @@ function renderAllExercises() {
                 <button class="ai-analysis-btn" data-exercise-id="${exercise.id}">
                     <i class="fas fa-robot"></i> AI分析
                 </button>
+
             </div>
             <div id="solution-${exercise.id}" class="solution-content">
                 <div class="solution-header">
@@ -2127,4 +2128,5 @@ function renderAllExercises() {
     }, 500);
 
     console.log('习题渲染完成');
+
 }

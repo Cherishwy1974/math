@@ -2261,6 +2261,717 @@
             </div>
         </div>
     </div>
+<!-- 内嵌式全屏模式容器：不定积分题目全屏展示 -->
+<div id="inline-fullscreen-container"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; flex-direction: column;">
+    <header
+        style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background-color: #2c4cc3; color: white; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+        <div style="font-size: 1.2rem; font-weight: bold; display: flex; align-items: center;">
+            <i class="fas fa-expand" style="margin-right: 10px;"></i> 不定积分题目全屏展示
+        </div>
+        <div style="display: flex; gap: 15px;">
+            <button id="inline-speed-btn"
+                style="background: rgba(255, 255, 255, 0.2); border: none; color: white; border-radius: 4px; padding: 6px 12px; cursor: pointer; display: flex; align-items: center; font-size: 14px;">
+                <i class="fas fa-tachometer-alt" style="margin-right: 6px;"></i> 标准速度
+            </button>
+            <button id="inline-close-btn"
+                style="background: rgba(255, 255, 255, 0.2); border: none; color: white; border-radius: 4px; padding: 6px 12px; cursor: pointer; display: flex; align-items: center; font-size: 14px;">
+                <i class="fas fa-times" style="margin-right: 6px;"></i> 关闭全屏
+            </button>
+        </div>
+    </header>
+    <div id="inline-slide-container" style="flex: 1; overflow: auto; padding: 20px; background-color: #f8f9fa;">
+        <!-- 幻灯片内容会动态生成 -->
+    </div>
+    <div style="display: flex; justify-content: space-between; padding: 15px; background: white; border-top: 1px solid #e2e8f0;">
+        <button id="inline-prev-slide"
+            style="display: flex; align-items: center; padding: 8px 15px; border: none; border-radius: 4px; background: #2c4cc3; color: white; cursor: pointer;">
+            <i class="fas fa-chevron-left" style="margin-right: 6px;"></i> 上一题
+        </button>
+        <div style="display: flex; align-items: center; font-size: 0.9rem; color: #343a40;">
+            题目 <span id="inline-current-slide">1</span> / <span id="inline-total-slides">N</span>
+        </div>
+        <button id="inline-next-slide"
+            style="display: flex; align-items: center; padding: 8px 15px; border: none; border-radius: 4px; background: #2c4cc3; color: white; cursor: pointer;">
+            下一题 <i class="fas fa-chevron-right" style="margin-left: 6px;"></i>
+        </button>
+    </div>
+</div>
+
+<!-- 内嵌式全屏模式功能脚本 -->
+<script>
+// 完整的全屏模式脚本
+(function() {
+    // 全局变量
+    let currentSlideIndex = 0;
+    let typingSpeed = 30; // 毫秒/字符
+    let isTyping = false;
+    let typingTimeout = null;
+    let currentLine = 0;
+    let totalLines = 0;
+    let solutionLines = [];
+    let fullscreenExercises = [];
+
+    // 先添加必要的样式
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = `
+        .fullscreen-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 10px 5px;
+            transition: background-color 0.3s ease;
+        }
+        .fullscreen-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        .fullscreen-btn i {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        /* 全屏模式内联样式 */
+        .inline-slide {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .inline-exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .inline-exercise-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .inline-exercise-number {
+            width: 35px;
+            height: 35px;
+            background: #2c4cc3;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .inline-exercise-tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+        .inline-exercise-tag i {
+            margin-right: 5px;
+        }
+        .inline-exercise-tag.type {
+            background: #3498db;
+        }
+        .inline-exercise-tag.difficulty {
+            background: #f39c12;
+        }
+        .inline-exercise-tag.difficulty.easy {
+            background: #2ecc71;
+        }
+        .inline-exercise-tag.difficulty.hard {
+            background: #e74c3c;
+        }
+        .inline-exercise-tag.category {
+            background: #9b59b6;
+        }
+        .inline-exercise-tag.method {
+            background: #34495e;
+        }
+        .inline-exercise-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .inline-exercise-question {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2c4cc3;
+        }
+        .inline-toggle-solution-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background: #2c4cc3;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        .inline-toggle-solution-btn:hover {
+            background: #1a3ca4;
+        }
+        .inline-toggle-solution-btn i {
+            margin-right: 8px;
+        }
+        .inline-solution-content {
+            display: none;
+            margin-top: 15px;
+        }
+        .inline-solution-content.show {
+            display: block;
+        }
+        .inline-explanation, .inline-answer {
+            margin-bottom: 20px;
+        }
+        .inline-explanation h4, .inline-answer h4 {
+            display: flex;
+            align-items: center;
+            color: #2c4cc3;
+            padding: 10px;
+            background: #edf2fd;
+            border-radius: 6px 6px 0 0;
+            margin: 0;
+        }
+        .inline-explanation h4 i, .inline-answer h4 i {
+            margin-right: 8px;
+        }
+        .inline-explanation-text, .inline-answer > div {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 0 0 6px 6px;
+            border-left: 3px solid #2c4cc3;
+        }
+        .inline-typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: #2c4cc3;
+            vertical-align: middle;
+            margin-left: 2px;
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .inline-solution-paragraph {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+    `;
+    document.head.appendChild(fullscreenStyle);
+    
+    // 确保全屏容器存在
+    function ensureFullscreenContainer() {
+        let container = document.getElementById('inline-fullscreen-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'inline-fullscreen-container';
+            container.style.display = 'none';
+            container.style.position = 'fixed';
+            container.style.top = '0';
+            container.style.left = '0';
+            container.style.width = '100%';
+            container.style.height = '100%';
+            container.style.backgroundColor = 'white';
+            container.style.zIndex = '9999';
+            container.style.display = 'none';
+            container.style.flexDirection = 'column';
+            
+            const headerHtml = `
+                <header style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background-color: #2c4cc3; color: white; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+                    <div style="font-size: 1.2rem; font-weight: bold; display: flex; align-items: center;">
+                        <i class="fas fa-expand" style="margin-right: 10px;"></i> <span id="fullscreen-title">题目全屏展示</span>
+                    </div>
+                    <div style="display: flex; gap: 15px;">
+                        <button id="inline-speed-btn" style="background: rgba(255, 255, 255, 0.2); border: none; color: white; border-radius: 4px; padding: 6px 12px; cursor: pointer; display: flex; align-items: center; font-size: 14px;">
+                            <i class="fas fa-tachometer-alt" style="margin-right: 6px;"></i> 标准速度
+                        </button>
+                        <button id="inline-close-btn" style="background: rgba(255, 255, 255, 0.2); border: none; color: white; border-radius: 4px; padding: 6px 12px; cursor: pointer; display: flex; align-items: center; font-size: 14px;">
+                            <i class="fas fa-times" style="margin-right: 6px;"></i> 关闭全屏
+                        </button>
+                    </div>
+                </header>
+            `;
+            
+            const contentHtml = `
+                <div id="inline-slide-container" style="flex: 1; overflow: auto; padding: 20px; background-color: #f8f9fa;"></div>
+            `;
+            
+            const footerHtml = `
+                <div style="display: flex; justify-content: space-between; padding: 15px; background: white; border-top: 1px solid #e2e8f0;">
+                    <button id="inline-prev-slide" style="display: flex; align-items: center; padding: 8px 15px; border: none; border-radius: 4px; background: #2c4cc3; color: white; cursor: pointer;">
+                        <i class="fas fa-chevron-left" style="margin-right: 6px;"></i> 上一题
+                    </button>
+                    <div style="display: flex; align-items: center; font-size: 0.9rem; color: #343a40;">
+                        题目 <span id="inline-current-slide">1</span> / <span id="inline-total-slides">N</span>
+                    </div>
+                    <button id="inline-next-slide" style="display: flex; align-items: center; padding: 8px 15px; border: none; border-radius: 4px; background: #2c4cc3; color: white; cursor: pointer;">
+                        下一题 <i class="fas fa-chevron-right" style="margin-left: 6px;"></i>
+                    </button>
+                </div>
+            `;
+            
+            container.innerHTML = headerHtml + contentHtml + footerHtml;
+            document.body.appendChild(container);
+            
+            // 绑定事件
+            document.getElementById('inline-close-btn').addEventListener('click', closeFullscreen);
+            document.getElementById('inline-speed-btn').addEventListener('click', toggleSpeed);
+            document.getElementById('inline-prev-slide').addEventListener('click', goPrevSlide);
+            document.getElementById('inline-next-slide').addEventListener('click', goNextSlide);
+            
+            // 添加键盘事件
+            document.addEventListener('keydown', handleKeyDown);
+        }
+        return container;
+    }
+    
+    // 为所有题目添加全屏按钮
+    function addFullscreenButtons() {
+        const exercises = document.querySelectorAll('.exercise-item');
+        exercises.forEach(exercise => {
+            const exerciseId = exercise.getAttribute('data-id');
+            if (!exerciseId) return;
+            
+            // 检查是否已添加全屏按钮
+            if (exercise.querySelector('.fullscreen-btn')) return;
+            
+            const solutionSection = exercise.querySelector('.solution-section');
+            if (!solutionSection) return;
+            
+            const fullscreenBtn = document.createElement('button');
+            fullscreenBtn.className = 'fullscreen-btn';
+            fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i> 全屏模式';
+            fullscreenBtn.addEventListener('click', () => {
+                openFullscreen(exerciseId);
+            });
+            
+            // 插入到解析按钮旁边
+            const solutionToggle = solutionSection.querySelector('.solution-toggle');
+            if (solutionToggle) {
+                solutionToggle.parentNode.insertBefore(fullscreenBtn, solutionToggle.nextSibling);
+            } else {
+                solutionSection.appendChild(fullscreenBtn);
+            }
+        });
+    }
+    
+    // 打开全屏模式
+    function openFullscreen(exerciseId) {
+        // 获取习题数据
+        let exercisesArr = [];
+        if (window.exerciseData && Array.isArray(window.exerciseData.exercises)) {
+            exercisesArr = window.exerciseData.exercises;
+        } else {
+            console.error('未找到习题数据');
+            alert('无法加载习题数据，请刷新页面后重试');
+            return;
+        }
+        
+        // 确保全屏容器存在
+        const container = ensureFullscreenContainer();
+        
+        // 查找当前习题索引
+        currentSlideIndex = exercisesArr.findIndex(ex => ex.id == exerciseId);
+        if (currentSlideIndex === -1) {
+            console.error('未找到指定ID的习题');
+            alert('无法找到指定习题');
+            return;
+        }
+        
+        fullscreenExercises = exercisesArr;
+        renderSlide();
+        
+        // 显示全屏容器
+        container.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        // 设置标题
+        const title = document.getElementById('fullscreen-title');
+        if (title) {
+            title.textContent = document.title.includes('不定积分') ? '不定积分题目全屏展示' : '微分方程题目全屏展示';
+        }
+        
+        // 更新导航信息
+        updateNavigation();
+        
+        console.log('全屏模式已打开，当前题目索引:', currentSlideIndex);
+    }
+    
+    // 渲染当前幻灯片
+    function renderSlide() {
+        if (!fullscreenExercises.length || currentSlideIndex < 0 || currentSlideIndex >= fullscreenExercises.length) {
+            console.error('无效的幻灯片索引');
+            return;
+        }
+        
+        const exercise = fullscreenExercises[currentSlideIndex];
+        const container = document.getElementById('inline-slide-container');
+        if (!container) return;
+        
+        // 渲染习题内容
+        let difficultyClass = 'medium';
+        if (exercise.difficulty === 'easy') difficultyClass = 'easy';
+        if (exercise.difficulty === 'hard') difficultyClass = 'hard';
+        
+        container.innerHTML = `
+            <div class="inline-slide">
+                <div class="inline-exercise-header">
+                    <div class="inline-exercise-title-wrapper">
+                        <div class="inline-exercise-number">${exercise.id}</div>
+                        <h3 class="inline-exercise-title">${exercise.title || '习题 ' + exercise.id}</h3>
+                    </div>
+                    <div class="inline-exercise-meta">
+                        <div class="inline-exercise-tag type">
+                            <i class="fas fa-tag"></i> ${exercise.type || '习题'}
+                        </div>
+                        <div class="inline-exercise-tag difficulty ${difficultyClass}">
+                            <i class="fas fa-signal"></i> ${getDifficultyText(exercise.difficulty)}
+                        </div>
+                        <div class="inline-exercise-tag category">
+                            <i class="fas fa-folder"></i> ${exercise.category || '未分类'}
+                        </div>
+                        ${exercise.method ? `
+                        <div class="inline-exercise-tag method">
+                            <i class="fas fa-cogs"></i> ${exercise.method}
+                        </div>` : ''}
+                    </div>
+                </div>
+                
+                <div class="inline-exercise-question">
+                    ${exercise.question || '题目内容'}
+                </div>
+                
+                <div class="inline-solution-section">
+                    <button class="inline-toggle-solution-btn" data-exercise-id="${exercise.id}">
+                        <i class="fas fa-lightbulb"></i> 显示解析
+                    </button>
+                    <div id="inline-solution-${exercise.id}" class="inline-solution-content">
+                        <div class="inline-explanation">
+                            <h4><i class="fas fa-chalkboard-teacher"></i> 解析</h4>
+                            <div class="inline-explanation-text">
+                                <div id="inline-solution-text-${exercise.id}"></div>
+                                <span class="inline-typing-cursor" id="inline-cursor-${exercise.id}" style="display: none;"></span>
+                            </div>
+                        </div>
+                        <div class="inline-answer">
+                            <h4><i class="fas fa-check-circle"></i> 答案</h4>
+                            <div>${exercise.answer || '暂无答案'}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // 绑定解析按钮事件
+        const toggleBtn = container.querySelector('.inline-toggle-solution-btn');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', toggleSolution);
+        }
+        
+        // 初始化解析内容
+        if (exercise.explanation) {
+            solutionLines = exercise.explanation.split('\n')
+                .filter(line => line.trim() !== '')
+                .map(line => line.trim());
+            totalLines = solutionLines.length;
+            currentLine = 0;
+        } else {
+            solutionLines = ['暂无解析内容'];
+            totalLines = 1;
+            currentLine = 0;
+        }
+        
+        // 渲染公式
+        setTimeout(() => {
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([container])
+                    .catch(err => console.error('MathJax渲染错误:', err));
+            }
+        }, 100);
+    }
+    
+    // 添加点击提示
+    function addClickInstructions(exerciseId) {
+        const solutionContainer = document.getElementById(`inline-solution-${exerciseId}`);
+        if (!solutionContainer) return;
+        
+        // 移除现有的提示（如果有）
+        const existingInstruction = document.getElementById('click-instruction');
+        if (existingInstruction) {
+            existingInstruction.remove();
+        }
+        
+        // 创建提示元素
+        const instructionEl = document.createElement('div');
+        instructionEl.id = 'click-instruction';
+        instructionEl.style.textAlign = 'center';
+        instructionEl.style.padding = '10px';
+        instructionEl.style.marginTop = '10px';
+        instructionEl.style.marginBottom = '15px';
+        instructionEl.style.color = '#2c4cc3';
+        instructionEl.style.fontSize = '0.9rem';
+        instructionEl.style.fontWeight = 'bold';
+        instructionEl.style.background = '#f0f7ff';
+        instructionEl.style.border = '1px dashed #b0d0ff';
+        instructionEl.style.borderRadius = '6px';
+        instructionEl.innerHTML = '<i class="fas fa-hand-pointer"></i> 点击空白区域可显示下一行解析';
+        
+        // 插入到解析容器的开头
+        solutionContainer.insertBefore(instructionEl, solutionContainer.firstChild);
+    }
+    
+    // 切换解析显示/隐藏
+    function toggleSolution(e) {
+        const button = e.currentTarget;
+        const exerciseId = button.getAttribute('data-exercise-id');
+        const solution = document.getElementById(`inline-solution-${exerciseId}`);
+        
+        if (!solution) return;
+        
+        if (solution.classList.contains('show')) {
+            // 隐藏解析
+            solution.classList.remove('show');
+            button.innerHTML = '<i class="fas fa-lightbulb"></i> 显示解析';
+            // 停止打字效果
+            isTyping = false;
+            if (typingTimeout) {
+                clearTimeout(typingTimeout);
+                typingTimeout = null;
+            }
+        } else {
+            // 显示解析
+            solution.classList.add('show');
+            button.innerHTML = '<i class="fas fa-eye-slash"></i> 隐藏解析';
+            
+            // 准备打字效果但不自动开始
+            startTypingEffect(exerciseId);
+        }
+    }
+    
+    // 开始打字效果
+    function startTypingEffect(exerciseId) {
+        const textContainer = document.getElementById(`inline-solution-text-${exerciseId}`);
+        const cursor = document.getElementById(`inline-cursor-${exerciseId}`);
+        
+        if (!textContainer || !cursor) return;
+        
+        // 重置
+        textContainer.innerHTML = '';
+        currentLine = 0;
+        cursor.style.display = 'inline-block';
+        isTyping = false; // 初始状态为不输入，等待用户点击
+        
+        // 添加点击事件监听器
+        const slideContainer = document.getElementById('inline-slide-container');
+        if (slideContainer) {
+            slideContainer.onclick = function(e) {
+                // 只有当不在打字状态且有更多行要显示时才继续
+                if (!isTyping && currentLine < totalLines) {
+                    typeNextLine(exerciseId, textContainer, cursor);
+                }
+            };
+        }
+        
+        // 添加点击提示
+        addClickInstructions(exerciseId);
+        
+        // 不自动开始打字，等待用户点击
+    }
+    
+    // 打字效果 - 逐行显示
+    function typeNextLine(exerciseId, container, cursor) {
+        if (currentLine >= totalLines) {
+            cursor.style.display = 'none';
+            isTyping = false;
+            return;
+        }
+        
+        isTyping = true; // 标记为正在输入
+        
+        const line = solutionLines[currentLine];
+        const paragraph = document.createElement('div');
+        paragraph.className = 'inline-solution-paragraph';
+        container.appendChild(paragraph);
+        
+        let charIndex = 0;
+        
+        function typeChar() {
+            if (charIndex < line.length) {
+                paragraph.textContent += line.charAt(charIndex);
+                charIndex++;
+                
+                // 自动滚动
+                paragraph.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                
+                // 下一个字符
+                typingTimeout = setTimeout(typeChar, typingSpeed);
+            } else {
+                currentLine++;
+                
+                // 设置打字状态为完成
+                isTyping = false;
+                
+                // 渲染公式
+                if (window.MathJax && window.MathJax.typesetPromise) {
+                    window.MathJax.typesetPromise([paragraph])
+                        .catch(err => console.error('MathJax渲染错误:', err));
+                }
+                
+                // 更新光标位置和可见性
+                if (currentLine < totalLines) {
+                    cursor.style.display = 'inline-block';
+                    // 将光标定位在最后一段之后
+                    container.appendChild(cursor);
+                } else {
+                    cursor.style.display = 'none';
+                }
+                
+                // 重要：即使是在立即显示模式下，也要求用户点击才显示下一行
+            }
+        }
+        
+        // 开始打字
+        typeChar();
+    }
+    
+    // 切换打字速度
+    function toggleSpeed() {
+        const btn = document.getElementById('inline-speed-btn');
+        if (!btn) return;
+        
+        if (typingSpeed === 30) {
+            // 切换到快速
+            typingSpeed = 10;
+            btn.innerHTML = '<i class="fas fa-tachometer-alt"></i> 快速显示';
+        } else if (typingSpeed === 10) {
+            // 切换到立即显示字符（但仍需要点击）
+            typingSpeed = 1; // 接近立即显示，但不是0以保持点击要求
+            btn.innerHTML = '<i class="fas fa-bolt"></i> 立即显示字符';
+        } else {
+            // 切换回默认
+            typingSpeed = 30;
+            btn.innerHTML = '<i class="fas fa-tachometer-alt"></i> 标准速度';
+        }
+        
+        console.log('打字速度已更改为:', typingSpeed);
+    }
+    
+    // 关闭全屏
+    function closeFullscreen() {
+        const container = document.getElementById('inline-fullscreen-container');
+        if (container) {
+            container.style.display = 'none';
+            document.body.style.overflow = '';
+            
+            // 停止打字效果
+            isTyping = false;
+            if (typingTimeout) {
+                clearTimeout(typingTimeout);
+                typingTimeout = null;
+            }
+        }
+    }
+    
+    // 上一题
+    function goPrevSlide() {
+        if (currentSlideIndex > 0) {
+            currentSlideIndex--;
+            renderSlide();
+            updateNavigation();
+        }
+    }
+    
+    // 下一题
+    function goNextSlide() {
+        if (currentSlideIndex < fullscreenExercises.length - 1) {
+            currentSlideIndex++;
+            renderSlide();
+            updateNavigation();
+        }
+    }
+    
+    // 更新导航信息
+    function updateNavigation() {
+        document.getElementById('inline-current-slide').textContent = currentSlideIndex + 1;
+        document.getElementById('inline-total-slides').textContent = fullscreenExercises.length;
+        
+        // 更新按钮状态
+        document.getElementById('inline-prev-slide').disabled = currentSlideIndex <= 0;
+        document.getElementById('inline-next-slide').disabled = currentSlideIndex >= fullscreenExercises.length - 1;
+    }
+    
+    // 键盘事件处理
+    function handleKeyDown(e) {
+        const container = document.getElementById('inline-fullscreen-container');
+        if (container.style.display !== 'flex') return;
+        
+        switch (e.key) {
+            case 'Escape':
+                closeFullscreen();
+                break;
+            case 'ArrowLeft':
+                goPrevSlide();
+                break;
+            case 'ArrowRight':
+            case ' ':
+                goNextSlide();
+                break;
+            case 'Enter':
+                // 切换解析显示/隐藏
+                const toggleBtn = document.querySelector('.inline-toggle-solution-btn');
+                if (toggleBtn) toggleBtn.click();
+                break;
+        }
+    }
+    
+    // 获取难度文本
+    function getDifficultyText(difficulty) {
+        switch (difficulty) {
+            case 'easy': return '简单';
+            case 'medium': return '中等';
+            case 'hard': return '困难';
+            default: return '中等';
+        }
+    }
+    
+    // 初始化
+    function init() {
+        console.log('全屏模式功能初始化...');
+        ensureFullscreenContainer();
+        addFullscreenButtons();
+        
+        // 定期检查并添加全屏按钮
+        setInterval(addFullscreenButtons, 2000);
+    }
+    
+    // 启动
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+    
+    console.log('全屏模式功能已加载');
+})();
+</script>
+
 </body>
 
 </html>

@@ -32,10 +32,263 @@
             position: relative;
             transition: background-color 0.2s ease;
         }
-        
+
         .filter-btn.active {
             background-color: var(--primary-color);
             color: white;
+        }
+
+
+
+
+        .inline-slide {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .inline-exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .inline-exercise-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .inline-exercise-number {
+            background: #2c4cc3;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .inline-exercise-title {
+            font-size: 1.5rem;
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .inline-exercise-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .inline-exercise-tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .inline-exercise-tag i {
+            margin-right: 6px;
+        }
+
+        .inline-exercise-tag.type {
+            background: #3498db;
+        }
+
+        .inline-exercise-tag.difficulty {
+            background: #e74c3c;
+        }
+
+        .inline-exercise-tag.category {
+            background: #9b59b6;
+        }
+
+        .inline-exercise-tag.method {
+            background: #34495e;
+        }
+
+        .inline-exercise-tag.difficulty.easy {
+            background: #2ecc71;
+        }
+
+        .inline-exercise-tag.difficulty.medium {
+            background: #f39c12;
+        }
+
+        .inline-exercise-tag.difficulty.hard {
+            background: #e74c3c;
+        }
+
+        .inline-exercise-question {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f5f7fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .inline-solution-section {
+            position: relative;
+        }
+
+        .inline-toggle-solution-btn {
+            padding: 8px 16px;
+            background: #2c4cc3;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.3s;
+        }
+
+        .inline-toggle-solution-btn:hover {
+            background: #1a3cb3;
+        }
+
+        .inline-solution-content {
+            background: white;
+            border-radius: 8px;
+            padding: 0;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.5s, opacity 0.5s, padding 0.5s;
+            visibility: hidden;
+        }
+
+        .inline-solution-content.user-clicked {
+            max-height: 2000px;
+            padding: 20px;
+            opacity: 1;
+            visibility: visible;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .inline-solution-text {
+            white-space: pre-wrap;
+            display: inline;
+        }
+
+        .solution-paragraph {
+            margin-bottom: 0.8em;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .fs-solution-line {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: none;
+            margin-bottom: 1em;
+            padding: 0.5em 1em;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .fs-solution-line:last-child {
+            margin-bottom: 0;
+        }
+
+        .fs-ripple {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(44, 76, 195, 0.3);
+            transform: translate(-50%, -50%) scale(0);
+            pointer-events: none;
+            z-index: 9999;
+            animation: ripple 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+        }
+
+        @keyframes ripple {
+            to {
+                transform: translate(-50%, -50%) scale(3);
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .inline-explanation,
+        .inline-answer {
+            margin-bottom: 25px;
+        }
+
+        .inline-explanation h4,
+        .inline-answer h4 {
+            color: #2c4cc3;
+            display: flex;
+            align-items: center;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            padding-left: 10px;
+            border-left: 4px solid #2c4cc3;
+        }
+
+        .inline-explanation h4 i,
+        .inline-answer h4 i {
+            margin-right: 8px;
+        }
+
+        /* 添加视觉反馈样式 */
+        .inline-solution-content.user-clicked {
+            cursor: pointer;
+            position: relative;
+            z-index: 100;
+        }
+
+        .inline-solution-content.user-clicked:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        .inline-solution-content.user-clicked:active {
+            background-color: rgba(52, 152, 219, 0.1);
         }
 
         /* DeepSeek AI相关样式 */
@@ -347,25 +600,6 @@
         .filter-btn i {
             margin-right: 5px;
         }
-
-
-
-
-        .filter-btn .count {
-            margin-left: 6px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            font-weight: normal;
-        }
-
-        .filter-btn:not(.active) .count {
-            background: rgba(0, 0, 0, 0.1);
-            color: #555;
-        }
-
-
 
         /* 全局DeepSeek查询框 */
         .global-deepseek-container {
@@ -1327,7 +1561,7 @@
             z-index: 1;
             position: relative;
         }
-        
+
         /* 返回顶部按钮样式 */
         .scroll-to-top {
             position: fixed;
@@ -1351,20 +1585,18 @@
             transform: translateY(20px);
             transition: all 0.3s ease;
         }
-        
+
         .scroll-to-top.show {
             opacity: 1;
             visibility: visible;
             transform: translateY(0);
         }
-        
+
         .scroll-to-top:hover {
             background-color: #1e3a8a;
             transform: translateY(-5px);
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
         }
-
-        /* 以下是UI元素的样式，不影响文本排版和公式 */
 
         /* 容器样式 */
         .container {
@@ -2020,6 +2252,7 @@
             overflow: visible !important;
         }
     </style>
+
 </head>
 
 <body>
@@ -2034,21 +2267,21 @@
         // 筛选按钮处理函数 - 优化版
         window.filterButtonHandler = function (e) {
             e.preventDefault();
-            
+
             // 获取筛选条件
             const filter = this.getAttribute('data-filter');
-            
+
             // 使用requestAnimationFrame来避免在渲染周期内进行大量 DOM 操作
             requestAnimationFrame(() => {
                 // 获取所有筛选按钮
                 const filterButtons = document.querySelectorAll('.filter-btn');
-                
+
                 // 移除所有按钮的active类
                 filterButtons.forEach(btn => btn.classList.remove('active'));
-                
+
                 // 添加当前按钮的active类
                 this.classList.add('active');
-                
+
                 // 使用渲染函数筛选习题
                 if (window.renderExercises && typeof window.renderExercises === 'function') {
                     window.renderExercises(filter);
@@ -2248,7 +2481,7 @@
                 </div>
             </section>
 
-<!-- Knowledge points section -->
+            <!-- Knowledge points section -->
             <section id="knowledge" class="knowledge-section">
                 <h2 class="section-title" style="display: flex; align-items: center;">
                     <div style="display: flex; align-items: center;">
@@ -2256,14 +2489,15 @@
                         <span style="font-size: 0.8em; color: #ffffff; margin-left: 8px;">
                             <i class="fas fa-hand-point-down"></i> 点击幻灯片切换
                         </span>
-                    <div class="circle-nav" style="background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; display: flex; gap: 8px; margin-left: 68px;">
-                        <span class="circle-num active" data-slide="0" onclick="goToSlide(0)"
-                            style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: white; color: var(--primary-color); border-radius: 50%; font-weight: bold; cursor: pointer;">基</span>
-                        <span class="circle-num" data-slide="1" onclick="goToSlide(1)"
-                            style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.7); color: var(--primary-color); border-radius: 50%; font-weight: bold; cursor: pointer;">一</span>
-                        <span class="circle-num" data-slide="2" onclick="goToSlide(2)"
-                            style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.7); color: var(--primary-color); border-radius: 50%; font-weight: bold; cursor: pointer;">二</span>
-                    </div>
+                        <div class="circle-nav"
+                            style="background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; display: flex; gap: 8px; margin-left: 68px;">
+                            <span class="circle-num active" data-slide="0" onclick="goToSlide(0)"
+                                style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: white; color: var(--primary-color); border-radius: 50%; font-weight: bold; cursor: pointer;">基</span>
+                            <span class="circle-num" data-slide="1" onclick="goToSlide(1)"
+                                style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.7); color: var(--primary-color); border-radius: 50%; font-weight: bold; cursor: pointer;">一</span>
+                            <span class="circle-num" data-slide="2" onclick="goToSlide(2)"
+                                style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.7); color: var(--primary-color); border-radius: 50%; font-weight: bold; cursor: pointer;">二</span>
+                        </div>
                 </h2>
                 <!-- Slides container -->
                 <div class="slides-container">
@@ -2336,13 +2570,6 @@
         </div>
     </footer>
 
-    <!-- 返回顶部按钮 -->
-    <button class="scroll-to-top">
-        <i class="fas fa-chevron-up"></i>
-    </button>
-    <script src="js/differential-equation-data.js"></script>
-    <script src="js/differential-equation-scriptjs.js"></script>
-    <!-- 脚本加载检查 -->
     <script>
         // 定义缺失的函数，连接到scriptjs.js中的实际函数
         function displayExercises() {
@@ -2367,7 +2594,7 @@
             setTimeout(function () {
                 console.log('脚本加载状态检查:');
                 console.log('- exerciseData: ' + (typeof exerciseData !== 'undefined' ? '已加载' : '未加载'));
-                
+
                 // 初始化页面功能，包括返回顶部按钮
                 if (typeof initializePage === 'function') {
                     initializePage();
@@ -2436,34 +2663,34 @@
 
     <!-- 添加紧急内联修复脚本，确保在脚本文件未被正确加载的情况下按钮也能工作 -->
     <script>
-        // 直接在HTML中执行的紧急修复
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log('【内联紧急修复】DOM已加载，准备修复解析按钮');
+        // 使用立即执行函数封装代码，避免污染全局作用域
+        (function () {
+            'use strict';
 
+            console.log('【内联紧急修复】脚本初始化...');
+
+            // 主修复函数
             function inlineFixButtons() {
                 const buttons = document.querySelectorAll('.solution-toggle');
                 console.log(`【内联紧急修复】找到 ${buttons.length} 个解析按钮`);
 
                 buttons.forEach(function (button) {
-                    if (button.getAttribute('data-solution')) {
-                        return;
-                    }
+                    // 跳过已经处理过的按钮
+                    if (button.getAttribute('data-solution')) return;
 
                     const exerciseId = button.getAttribute('data-exercise-id');
-                    if (!exerciseId) {
-                        return;
-                    }
+                    if (!exerciseId) return;
 
                     console.log(`【内联紧急修复】处理按钮 ${exerciseId}`);
 
-                    // 创建一个新按钮
-                    const newBtn = document.createElement('button');
-                    newBtn.className = button.className;
+                    // 创建新按钮
+                    const newBtn = button.cloneNode(true);
                     newBtn.innerHTML = '<i class="fas fa-lightbulb"></i> 查看解析';
-                    newBtn.setAttribute('data-exercise-id', exerciseId);
+                    newBtn.style.cursor = 'pointer';
 
-                    // 直接设置onclick事件处理
-                    newBtn.onclick = function () {
+                    // 添加点击事件
+                    newBtn.addEventListener('click', function (e) {
+                        e.preventDefault();
                         const solutionId = 'solution-' + exerciseId;
                         const solution = document.getElementById(solutionId);
 
@@ -2472,37 +2699,34 @@
                             return false;
                         }
 
+                        // 切换显示/隐藏
                         if (solution.classList.contains('show')) {
-                            // 已经显示，需要隐藏
                             solution.classList.remove('show');
                             solution.style.display = 'none';
                             this.innerHTML = '<i class="fas fa-lightbulb"></i> 查看解析';
                         } else {
-                            // 显示解析
                             solution.classList.add('show');
                             solution.style.display = 'block';
-                            solution.style.maxHeight = 'none';
-                            solution.style.overflow = 'visible';
                             this.innerHTML = '<i class="fas fa-eye-slash"></i> 隐藏解析';
 
                             // 延迟渲染公式
-                            setTimeout(function () {
-                                try {
-                                    if (window.MathJax) {
+                            if (window.MathJax) {
+                                setTimeout(() => {
+                                    try {
                                         if (window.MathJax.typesetPromise) {
                                             window.MathJax.typesetPromise([solution]);
                                         } else if (window.MathJax.Hub) {
                                             window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub, solution]);
                                         }
+                                    } catch (e) {
+                                        console.error('渲染公式出错:', e);
                                     }
-                                } catch (e) {
-                                    console.error('渲染公式出错:', e);
-                                }
-                            }, 200);
+                                }, 200);
+                            }
                         }
 
                         return false;
-                    };
+                    });
 
                     // 替换原按钮
                     if (button.parentNode) {
@@ -2512,17 +2736,45 @@
                 });
             }
 
-            // 立即执行一次
-            setTimeout(inlineFixButtons, 1000);
+            // 初始化函数
+            function initFix() {
+                console.log('【内联紧急修复】开始初始化...');
 
-            // 以及在页面完全加载后
-            window.addEventListener('load', function () {
-                setTimeout(inlineFixButtons, 2000);
-            });
+                // 立即执行一次
+                inlineFixButtons();
 
-            // 定期检查
-            setInterval(inlineFixButtons, 5000);
-        });
+                // 在DOM加载完成后再次执行
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', function () {
+                        console.log('【内联紧急修复】DOM已加载');
+                        setTimeout(inlineFixButtons, 1000);
+                    });
+                }
+
+                // 在页面完全加载后执行
+                window.addEventListener('load', function () {
+                    console.log('【内联紧急修复】页面已完全加载');
+                    setTimeout(inlineFixButtons, 2000);
+                });
+
+                // 定期检查（每5秒）
+                setInterval(inlineFixButtons, 5000);
+
+                console.log('【内联紧急修复】初始化完成');
+            }
+
+            // 启动修复
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initFix);
+            } else {
+                // 如果DOM已经加载完成，直接初始化
+                setTimeout(initFix, 0);
+            }
+
+            // 导出到全局作用域（可选）
+            window.inlineFixButtons = inlineFixButtons;
+
+        })(); // 结束立即执行函数
     </script>
 
     <!-- DeepSeek AI 对话模态框 -->
@@ -2589,7 +2841,1077 @@
 
     <!-- 先加载数据，再加载处理脚本 -->
     <script src="js/differential-equation-data.js"></script>
+    
+    <!-- 添加全局DeepSeek查询函数的定义 -->
+    <script>
+        // 定义缺失的函数
+        function setupGlobalDeepSeekQuery() {
+            console.log('设置全局DeepSeek查询功能');
+            // 这里可以添加实际的功能实现
+        }
+        
+        // 确保aiButtons变量在全局作用域中可用，并初始化为空数组
+        if (typeof window.aiButtons === 'undefined') {
+            window.aiButtons = [];
+        }
+        let aiButtons = window.aiButtons;
+        
+        // 防止变量重复声明
+        if (typeof window.totalSlides === 'undefined') {
+            window.totalSlides = 0;
+        }
+        
+        if (typeof window.exerciseData === 'undefined') {
+            window.exerciseData = { knowledgePoints: [], exercises: [] };
+        }
+    </script>
+    
+    <!-- 加载主脚本 -->
     <script src="js/differential-equation-scriptjs.js"></script>
+
+
+</body>
+
+
+
+<script>
+    (function () {
+        // 创建并添加样式
+        const styleElement = document.createElement('style');
+        styleElement.textContent = `
+    /* 全屏容器 */
+    #fs-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        z-index: 9999;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    
+    /* 顶部栏 */
+    .fs-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        background: #2c4cc3;
+        color: white;
+    }
+    
+    .fs-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    
+    /* 内容区域 */
+    .fs-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        cursor: pointer; /* 指示可点击 */
+    }
+    
+    /* 底部栏 */
+    .fs-footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 20px;
+        background: #f1f3f5;
+        border-top: 1px solid #ddd;
+    }
+    
+    /* 习题样式 */
+    .fs-problem {
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .fs-problem-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .fs-problem-title {
+        font-size: 1.5rem;
+        margin: 0;
+        color: #2c3e50;
+    }
+    
+    .fs-question {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+    
+    .fs-solution-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 15px;
+        background: #2c4cc3;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    
+    .fs-solution-btn i {
+        margin-right: 8px;
+    }
+    
+    .fs-solution-container {
+        display: none;
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+    
+    /* 解析行样式 - 为公式优化 */
+    .fs-solution-line {
+        display: none;
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        animation: fadeIn 0.5s;
+    }
+    
+    /* 数学公式行特殊样式 */
+    .fs-math-line {
+        margin: 12px 0;
+        padding: 10px;
+        background: rgba(255,255,255,0.9);
+        border-radius: 6px;
+        text-align: left;
+        border-left: 3px solid #2c4cc3;
+    }
+    
+    /* 确保数学公式正确显示 */
+    .MathJax, .MathJax_Display {
+        text-align: left !important;
+        margin: 0.5em 0 !important;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* 点击提示 */
+    .fs-click-hint {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+        margin: 10px 0;
+        padding: 8px;
+        background: rgba(44, 76, 195, 0.1);
+        border-radius: 5px;
+    }
+    
+    /* 进度条 */
+    .fs-progress {
+        display: flex;
+        align-items: center;
+        margin-top: 15px;
+        font-size: 0.9rem;
+        color: #666;
+    }
+    
+    .fs-progress-bar {
+        flex: 1;
+        height: 4px;
+        background: #eee;
+        margin: 0 10px;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+    
+    .fs-progress-fill {
+        height: 100%;
+        background: #2c4cc3;
+        width: 0%;
+        transition: width 0.3s;
+    }
+    
+    /* 点击反馈效果 */
+    .fs-ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(44, 76, 195, 0.3);
+        transform: translate(-50%, -50%) scale(0);
+        animation: ripple 0.6s linear;
+        pointer-events: none;
+    }
+    
+    @keyframes ripple {
+        to {
+            transform: translate(-50%, -50%) scale(3);
+            opacity: 0;
+        }
+    }
+    
+    /* 全屏按钮 */
+    .fs-view-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 15px;
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-left: 10px;
+    }
+    
+    /* 上一题/下一题按钮 */
+    #fs-prev-btn, #fs-next-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 20px;
+        margin: 0 5px;
+        background: linear-gradient(135deg, #4a6bdf, #2c4cc3);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    #fs-prev-btn i, #fs-next-btn i {
+        margin: 0 5px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+    
+    #fs-prev-btn:hover, #fs-next-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        background: linear-gradient(135deg, #3a5bd9, #1e3d9e);
+    }
+    
+    #fs-prev-btn:active, #fs-next-btn:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    #fs-prev-btn:disabled, #fs-next-btn:disabled {
+        background: #cccccc !important;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+        opacity: 0.7;
+    }
+    
+    #fs-prev-btn::before, #fs-next-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    #fs-prev-btn:hover::before, #fs-next-btn:hover::before {
+        opacity: 1;
+    }
+    
+    .fs-view-btn i {
+        margin-right: 8px;
+    }
+    
+    /* 答案样式 */
+    .fs-answer {
+        margin-top: 20px;
+        padding: 10px 15px;
+        background: rgba(46, 204, 113, 0.1);
+        border-left: 3px solid #2ecc71;
+        border-radius: 4px;
+    }
+    
+    .fs-answer-title {
+        font-weight: bold;
+        color: #27ae60;
+        margin-bottom: 5px;
+    }
+    
+    /* 逐行显示解决方案的样式 */
+    .fs-solution-container {
+        margin-top: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .fs-solution-line {
+        display: none;
+        margin: 10px 0;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    
+    .fs-solution-line.visible {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .fs-solution-line.highlight {
+        background: rgba(52, 152, 219, 0.1);
+        border-left: 3px solid #3498db;
+    }
+    
+    .fs-solution-line:last-child {
+        margin-bottom: 0;
+    }
+    
+    .fs-solution-line p {
+        margin: 5px 0;
+    }
+    
+    .fs-solution-line .formula {
+        margin: 10px 0;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 4px;
+        overflow-x: auto;
+    }
+    `;
+        document.head.appendChild(styleElement);
+
+        // 创建全屏容器
+        const container = document.createElement('div');
+        container.id = 'fs-container';
+        container.innerHTML = `
+    <div class="fs-header">
+        <div class="fs-title">微分方程题目全屏查看</div>
+        <button id="fs-close-btn" class="fs-btn">
+            <i class="fas fa-times"></i> 关闭
+        </button>
+    </div>
+    <div id="fs-content" class="fs-content"></div>
+    <div class="fs-footer">
+        <button id="fs-prev-btn" class="fs-btn">
+            <i class="fas fa-chevron-left"></i> 上一题
+        </button>
+        <div id="fs-info">题目 <span id="fs-current">1</span> / <span id="fs-total">1</span></div>
+        <button id="fs-next-btn" class="fs-btn">
+            <i class="fas fa-chevron-right"></i> 下一题
+        </button>
+    </div>
+    `;
+        document.body.appendChild(container);
+
+        // 状态对象
+        const state = {
+            exercises: [],
+            currentIndex: 0,
+            isActive: false,
+            solutionVisible: false,
+            visibleLines: 0,
+            totalLines: 0,
+            latexLines: [] // 存储LaTeX公式行
+        };
+
+        // 收集习题 - 为LaTeX公式优化版本
+        function collectExercises() {
+            const items = document.querySelectorAll('.exercise-item');
+            console.log(`找到 ${items.length} 个习题`);
+
+            // 清空之前的习题缓存
+            state.exercises = [];
+
+            items.forEach((item, index) => {
+                // 获取题目ID (原始ID或索引)
+                const id = item.getAttribute('data-id') || (index + 1).toString();
+
+                // 获取题目标题
+                const titleElem = item.querySelector('.exercise-title');
+                const title = titleElem ? titleElem.textContent.trim() : `习题 ${id}`;
+
+                // 获取题目内容
+                const questionElem = item.querySelector('.question');
+                const question = questionElem ? questionElem.innerHTML : '题目内容无法加载';
+
+                // 获取解析内容
+                const solutionElem = item.querySelector('.solution-content');
+                const solution = solutionElem ? solutionElem.innerHTML : '暂无解析';
+
+                // 获取答案
+                const answerElem = item.querySelector('.answer');
+                const answer = answerElem ? answerElem.innerHTML : '暂无答案';
+
+                // 获取题目类型/难度等信息
+                const typeElem = item.querySelector('.exercise-type');
+                const difficultyElem = item.querySelector('.exercise-difficulty');
+                const categoryElem = item.querySelector('.exercise-category');
+
+                const type = typeElem ? typeElem.textContent.trim() : '';
+                const difficulty = difficultyElem ? difficultyElem.textContent.trim() : '';
+                const category = categoryElem ? categoryElem.textContent.trim() : '';
+
+                // 添加到习题数组
+                state.exercises.push({
+                    id: id,
+                    title: title,
+                    question: question,
+                    solution: solution,
+                    answer: answer,
+                    type: type,
+                    difficulty: difficulty,
+                    category: category
+                });
+
+                // 添加全屏按钮 (仅添加一次)
+                addFullscreenButton(item, index);
+            });
+
+            console.log(`已收集 ${state.exercises.length} 个习题`);
+
+            // 更新总题目数
+            updateTotalCount();
+        }
+
+        // 添加全屏按钮
+        function addFullscreenButton(item, index) {
+            // 检查是否已有按钮
+            if (item.querySelector('.fs-view-btn')) return;
+
+            // 查找按钮容器 (使用更可靠的选择器)
+            const btnContainer = item.querySelector('.exercise-footer') ||
+                item.querySelector('.solution-toggle')?.parentNode;
+
+            if (btnContainer) {
+                // 创建全屏按钮
+                const button = document.createElement('button');
+                button.className = 'fs-view-btn';
+                button.innerHTML = '<i class="fas fa-expand"></i> 全屏查看';
+                button.setAttribute('data-index', index);
+
+                // 添加点击事件
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showFullscreen(index);
+                });
+
+                // 添加到容器
+                btnContainer.appendChild(button);
+            }
+        }
+
+        // 显示全屏模式 - 修复版本
+        function showFullscreen(index) {
+            console.log(`打开全屏模式，习题索引: ${index}`);
+
+            // 验证索引和数据
+            if (state.exercises.length === 0) {
+                console.error('没有可用的习题数据');
+                alert('没有可用的习题数据，请刷新页面后重试');
+                return;
+            }
+
+            if (index < 0 || index >= state.exercises.length) {
+                console.error(`习题索引越界: ${index}`);
+                index = 0; // 默认显示第一题
+            }
+
+            // 更新状态
+            state.currentIndex = index;
+            state.isActive = true;
+            state.solutionVisible = false;
+            state.visibleLines = 0;
+            state.latexLines = []; // 清空之前的公式行
+
+            // 显示容器
+            const container = document.getElementById('fs-container');
+            container.style.display = 'flex';
+
+            // 阻止背景滚动
+            document.body.style.overflow = 'hidden';
+
+            // 渲染习题 (添加错误处理)
+            try {
+                renderExercise(state.exercises[index]);
+            } catch (error) {
+                console.error('渲染习题出错:', error);
+                document.getElementById('fs-content').innerHTML = `
+                <div class="fs-problem">
+                    <div class="fs-problem-header">
+                        <h3 class="fs-problem-title">加载失败</h3>
+                    </div>
+                    <div class="fs-question">习题加载失败，请刷新页面后重试。</div>
+                </div>
+            `;
+            }
+
+            // 更新导航按钮
+            updateNavButtons();
+        }
+
+        // 关闭全屏模式
+        function closeFullscreen() {
+            console.log('关闭全屏模式');
+
+            // 更新状态
+            state.isActive = false;
+
+            // 隐藏容器
+            const container = document.getElementById('fs-container');
+            container.style.display = 'none';
+
+            // 恢复背景滚动
+            document.body.style.overflow = '';
+        }
+
+        // 渲染习题 - 为LaTeX优化版本
+        function renderExercise(exercise) {
+            console.log(`正在渲染习题: ${exercise.id} - ${exercise.title}`);
+
+            const content = document.getElementById('fs-content');
+            if (!content) {
+                console.error('找不到内容容器');
+                return;
+            }
+
+            // 清空内容
+            content.innerHTML = '';
+
+            // 创建习题元素
+            const problem = document.createElement('div');
+            problem.className = 'fs-problem';
+            problem.innerHTML = `
+            <div class="fs-problem-header">
+                <h3 class="fs-problem-title">${exercise.title}</h3>
+                <div class="fs-problem-number">题目 ${exercise.id}</div>
+            </div>
+            <div class="fs-question">${exercise.question}</div>
+            <button id="fs-solution-btn" class="fs-solution-btn">
+                <i class="fas fa-lightbulb"></i> 显示解析
+            </button>
+            <div id="fs-solution-container" class="fs-solution-container">
+                <div class="fs-click-hint">点击此区域显示下一行解析</div>
+                <div id="fs-solution-content"></div>
+                <div class="fs-progress">
+                    <span>解析进度</span>
+                    <div class="fs-progress-bar">
+                        <div id="fs-progress-fill" class="fs-progress-fill"></div>
+                    </div>
+                    <span id="fs-progress-text">0/0</span>
+                </div>
+                <div id="fs-answer" class="fs-answer" style="display:none;">
+                    <div class="fs-answer-title">答案</div>
+                    <div>${exercise.answer.replace(/^.*答案：\s*/, '')}</div>
+                </div>
+            </div>
+        `;
+
+            // 添加到内容区域
+            content.appendChild(problem);
+
+            // 更新当前题号
+            updateCurrentNumber(exercise.id);
+
+            // 准备解析内容 - 专门处理公式
+            prepareSolutionContent(exercise.solution);
+
+            // 渲染数学公式
+            setTimeout(() => {
+                renderMathJax(content);
+            }, 100);
+        }
+
+        // 准备解析内容 - 专门针对LaTeX公式块的优化版本
+        function prepareSolutionContent(solutionHtml) {
+            console.log('准备解析内容');
+
+            // 获取解析容器
+            const container = document.getElementById('fs-solution-content');
+            if (!container) {
+                console.error('找不到解析容器');
+                return;
+            }
+
+            // 清空容器
+            container.innerHTML = '';
+
+            // 提取所有$$...$$格式的LaTeX公式块
+            const latexRegex = /\$\$(.*?)\$\$/gs;
+            const matches = [...solutionHtml.matchAll(latexRegex)];
+
+            if (matches && matches.length > 0) {
+                console.log(`找到 ${matches.length} 个LaTeX公式块`);
+
+                // 将每个公式块作为单独的一行
+                state.latexLines = matches.map(match => match[0]);
+                state.totalLines = state.latexLines.length;
+
+                // 创建每个公式行的容器，但不显示它们
+                state.latexLines.forEach((line, index) => {
+                    const lineDiv = document.createElement('div');
+                    lineDiv.className = 'fs-solution-line fs-math-line';
+                    lineDiv.innerHTML = line;
+                    lineDiv.setAttribute('data-line', index);
+                    lineDiv.style.display = 'none'; // 初始隐藏
+                    container.appendChild(lineDiv);
+                });
+
+                console.log(`已准备 ${state.totalLines} 行解析内容`);
+            } else {
+                // 如果没有检测到LaTeX公式，回退到常规处理
+                console.log('未找到LaTeX公式块，使用常规处理');
+
+                // 创建临时元素解析HTML
+                const temp = document.createElement('div');
+                temp.innerHTML = solutionHtml;
+
+                // 尝试按段落分割
+                const paragraphs = temp.querySelectorAll('p, div:not(:empty), li');
+                const lines = [];
+
+                if (paragraphs && paragraphs.length > 0) {
+                    paragraphs.forEach(p => {
+                        if (p.textContent.trim()) {
+                            lines.push(p.outerHTML);
+                        }
+                    });
+                } else {
+                    // 按<br>分割
+                    const parts = solutionHtml.split(/<br\s*\/?>/gi);
+                    parts.forEach(part => {
+                        if (part.trim()) {
+                            lines.push(`<div>${part}</div>`);
+                        }
+                    });
+                }
+
+                // 确保至少有一行
+                if (lines.length === 0) {
+                    lines.push(`<div>${solutionHtml}</div>`);
+                }
+
+                state.latexLines = lines;
+                state.totalLines = lines.length;
+
+                // 创建每一行
+                lines.forEach((line, index) => {
+                    const lineDiv = document.createElement('div');
+                    lineDiv.className = 'fs-solution-line';
+                    lineDiv.innerHTML = line;
+                    lineDiv.setAttribute('data-line', index);
+                    lineDiv.style.display = 'none'; // 初始隐藏
+                    container.appendChild(lineDiv);
+                });
+            }
+
+            // 更新进度文本
+            updateProgress();
+        }
+
+        // 显示下一行解析 - 优化版本
+        function showNextLine() {
+            // 检查是否已显示解析
+            if (!state.solutionVisible) return;
+
+            // 检查是否已显示所有行
+            if (state.visibleLines >= state.totalLines) {
+                // 如果所有行都已显示，显示答案
+                const answerDiv = document.getElementById('fs-answer');
+                if (answerDiv && answerDiv.style.display === 'none') {
+                    answerDiv.style.display = 'block';
+                    updateClickHint('解析和答案已全部显示');
+                }
+                return;
+            }
+
+            console.log(`显示第 ${state.visibleLines + 1}/${state.totalLines} 行解析`);
+
+            // 获取下一行
+            const line = document.querySelector(`.fs-solution-line[data-line="${state.visibleLines}"]`);
+            if (!line) {
+                console.error(`找不到解析行 ${state.visibleLines}`);
+                state.visibleLines++; // 继续前进
+                updateProgress();
+                return;
+            }
+
+            // 显示当前行并添加动画效果
+            line.style.display = 'block';
+            line.style.animation = 'fadeIn 0.5s ease forwards';
+
+            // 增加可见行数计数器
+            state.visibleLines++;
+
+            // 更新进度
+            updateProgress();
+
+            // 渲染公式
+            renderMathJax(line);
+
+            // 滚动到新显示的行
+            setTimeout(() => {
+                line.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        // 更新点击提示
+        function updateClickHint(text) {
+            const hint = document.querySelector('.fs-click-hint');
+            if (hint) {
+                hint.textContent = text;
+                hint.style.opacity = '0.6';
+            }
+        }
+
+        // 更新进度
+        function updateProgress() {
+            // 更新进度文本
+            const progressText = document.getElementById('fs-progress-text');
+            if (progressText) {
+                progressText.textContent = `${state.visibleLines}/${state.totalLines}`;
+            }
+
+            // 更新进度条
+            const progressFill = document.getElementById('fs-progress-fill');
+            if (progressFill) {
+                const percent = (state.visibleLines / state.totalLines) * 100;
+                progressFill.style.width = `${percent}%`;
+            }
+
+            // 更新提示
+            const hint = document.querySelector('.fs-click-hint');
+            if (hint) {
+                if (state.visibleLines >= state.totalLines) {
+                    hint.textContent = '点击继续显示答案';
+                } else {
+                    hint.textContent = '点击此区域显示下一行解析';
+                }
+            }
+        }
+
+        // 切换解析显示
+        function toggleSolution() {
+            console.log('切换解析显示');
+
+            // 获取元素
+            const btn = document.getElementById('fs-solution-btn');
+            const container = document.getElementById('fs-solution-container');
+
+            if (!btn || !container) {
+                console.error('找不到解析按钮或容器');
+                return;
+            }
+
+            if (!state.solutionVisible) {
+                // 显示解析
+                container.style.display = 'block';
+                btn.innerHTML = '<i class="fas fa-eye-slash"></i> 隐藏解析';
+
+                // 设置状态
+                state.solutionVisible = true;
+                state.visibleLines = 0; // 重置可见行数
+
+                // 隐藏所有行和答案
+                document.querySelectorAll('.fs-solution-line').forEach(line => {
+                    line.style.display = 'none';
+                });
+
+                const answerDiv = document.getElementById('fs-answer');
+                if (answerDiv) {
+                    answerDiv.style.display = 'none';
+                }
+
+                // 显示第一行
+                showNextLine();
+
+                // 将容器滚动到可见位置
+                container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            } else {
+                // 隐藏解析
+                container.style.display = 'none';
+                btn.innerHTML = '<i class="fas fa-lightbulb"></i> 显示解析';
+                state.solutionVisible = false;
+            }
+        }
+
+        // 添加点击波纹效果
+        function addRippleEffect(event) {
+            // 创建波纹元素
+            const ripple = document.createElement('div');
+            ripple.className = 'fs-ripple';
+
+            // 设置位置
+            ripple.style.left = `${event.clientX}px`;
+            ripple.style.top = `${event.clientY}px`;
+
+            // 添加到文档
+            document.body.appendChild(ripple);
+
+            // 动画结束后移除
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+
+        // 更新导航按钮状态
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('fs-prev-btn');
+            const nextBtn = document.getElementById('fs-next-btn');
+
+            if (!prevBtn || !nextBtn) return;
+
+            // 禁用上一题按钮
+            prevBtn.disabled = state.currentIndex === 0;
+            prevBtn.style.opacity = state.currentIndex === 0 ? '0.5' : '1';
+
+            // 禁用下一题按钮
+            nextBtn.disabled = state.currentIndex === state.exercises.length - 1;
+            nextBtn.style.opacity = state.currentIndex === state.exercises.length - 1 ? '0.5' : '1';
+        }
+
+        // 更新当前题号显示
+        function updateCurrentNumber(number) {
+            const current = document.getElementById('fs-current');
+            if (current) {
+                current.textContent = number;
+            }
+        }
+
+        // 更新总题目数显示
+        function updateTotalCount() {
+            const total = document.getElementById('fs-total');
+            if (total) {
+                total.textContent = state.exercises.length;
+            }
+        }
+
+        // 导航到上一题
+        function goToPrevious() {
+            if (state.currentIndex > 0) {
+                showFullscreen(state.currentIndex - 1);
+            }
+        }
+
+        // 导航到下一题
+        function goToNext() {
+            if (state.currentIndex < state.exercises.length - 1) {
+                showFullscreen(state.currentIndex + 1);
+            }
+        }
+
+        // 渲染数学公式
+        function renderMathJax(element) {
+            if (!window.MathJax) {
+                console.warn('MathJax未加载，无法渲染公式');
+                return;
+            }
+
+            try {
+                if (typeof window.MathJax.typeset === 'function') {
+                    // MathJax v3
+                    window.MathJax.typeset([element]);
+                } else if (typeof window.MathJax.typesetPromise === 'function') {
+                    // MathJax v3 异步
+                    window.MathJax.typesetPromise([element]).catch(err => {
+                        console.warn('MathJax渲染警告:', err);
+                    });
+                } else if (window.MathJax.Hub) {
+                    // MathJax v2
+                    window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub, element]);
+                }
+            } catch (err) {
+                console.error('公式渲染错误:', err);
+            }
+        }
+
+        // 绑定事件 - 修复版本
+        function bindEvents() {
+            console.log('绑定全屏模式事件');
+
+            // 关闭按钮
+            const closeBtn = document.getElementById('fs-close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeFullscreen);
+            }
+
+            // 上一题按钮
+            const prevBtn = document.getElementById('fs-prev-btn');
+            if (prevBtn) {
+                prevBtn.addEventListener('click', goToPrevious);
+            }
+
+            // 下一题按钮
+            const nextBtn = document.getElementById('fs-next-btn');
+            if (nextBtn) {
+                nextBtn.addEventListener('click', goToNext);
+            }
+
+            // 解析按钮点击委托
+            document.addEventListener('click', function (event) {
+                if (!state.isActive) return;
+
+                // 解析按钮点击
+                const solutionBtn = event.target.closest('#fs-solution-btn');
+                if (solutionBtn) {
+                    toggleSolution();
+                    return;
+                }
+
+                // 解析内容区域点击 - 显示下一行
+                const solutionContainer = document.getElementById('fs-solution-container');
+                if (state.solutionVisible && solutionContainer && solutionContainer.contains(event.target)) {
+                    // 不处理进度条区域的点击和按钮点击
+                    if (!event.target.closest('.fs-progress') &&
+                        !event.target.closest('#fs-solution-btn') &&
+                        !event.target.closest('.fs-answer')) {
+                        showNextLine();
+                        addRippleEffect(event);
+                    }
+                }
+            });
+
+            // 键盘导航
+            document.addEventListener('keydown', function (event) {
+                // 只处理全屏模式下的按键
+                if (!state.isActive) return;
+
+                // ESC键：关闭全屏
+                if (event.key === 'Escape') {
+                    closeFullscreen();
+                    return;
+                }
+
+                // 左箭头：上一题
+                if (event.key === 'ArrowLeft') {
+                    goToPrevious();
+                    return;
+                }
+
+                // 右箭头：下一题
+                if (event.key === 'ArrowRight') {
+                    goToNext();
+                    return;
+                }
+
+                // 空格键或下箭头：显示下一行或切换解析
+                if (event.key === ' ' || event.code === 'Space' || event.key === 'ArrowDown') {
+                    event.preventDefault();
+
+                    if (state.solutionVisible) {
+                        showNextLine();
+                    } else {
+                        toggleSolution();
+                    }
+                    return;
+                }
+            });
+        }
+
+        // 初始化 - 修复版本
+        function init() {
+            console.log('初始化全屏模式系统');
+
+            try {
+                // 收集习题
+                collectExercises();
+
+                // 绑定事件
+                bindEvents();
+
+                // 定期检查新题目，确保动态加载的内容也能被收集
+                setTimeout(collectExercises, 1000);
+                setTimeout(collectExercises, 3000);
+                setInterval(collectExercises, 10000);
+
+                console.log('全屏查看系统已初始化完成');
+            } catch (error) {
+                console.error('全屏模式初始化失败:', error);
+            }
+        }
+
+        // 初始化内容显示功能
+        function initLineByLine() {
+            const solutionContainers = document.querySelectorAll('.fs-solution-container');
+            
+            solutionContainers.forEach(container => {
+                const lines = container.querySelectorAll('.fs-solution-line');
+                
+                // 初始化所有行为隐藏状态
+                lines.forEach((line, index) => {
+                    line.style.display = 'block';
+                    line.style.opacity = '0';
+                    line.style.transform = 'translateY(10px)';
+                    
+                    // 为每行添加动画延迟
+                    line.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    line.style.transitionDelay = (index * 0.1) + 's';
+                });
+                
+                // 使用setTimeout确保DOM已更新
+                setTimeout(() => {
+                    // 一次性显示所有行
+                    lines.forEach((line, index) => {
+                        setTimeout(() => {
+                            line.style.opacity = '1';
+                            line.style.transform = 'translateY(0)';
+                        }, index * 50); // 添加轻微错开效果
+                    });
+                }, 100);
+                
+                // 添加点击事件，点击后移除所有高亮
+                container.addEventListener('click', function() {
+                    lines.forEach(line => {
+                        line.classList.remove('highlight');
+                    });
+                });
+            });
+        }
+        
+        // 页面加载完成后初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(() => {
+                    init();
+                    initLineByLine();
+                }, 1000); // 延迟初始化确保页面元素已加载
+            });
+        } else {
+            setTimeout(() => {
+                init();
+                initLineByLine();
+            }, 1000);
+        }
+    })();
+</script>
+
 
 </body>
 

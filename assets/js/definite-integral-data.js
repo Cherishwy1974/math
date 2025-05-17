@@ -589,37 +589,16 @@ $$= 4$$
 由于 $f(x)$ 是分段函数，我们需要将积分区间分成两部分，分别计算。
 
 根据定积分的区间可加性：
-$$\\int_0^2 f(x) dx = \\int_0^1 f(x) dx + \\int_1^2 f(x) dx$$
-
-先计算第一部分：
-当 $0 \\leq x < 1$ 时，$f(x) = x$：
-$$
-\\int_0^1 x dx = \\left.\\frac{x^2}{2}\\right|_0^1 = \\frac{1^2}{2} - \\frac{0^2}{2} = \\frac{1}{2}
-$$
+$$\\int_0^2 f(x) dx = \\int_0^1 f(x) dx + \\int_1^2 f(x) dx\\int_0^1 x dx = \\left.\\frac{x^2}{2}\\right|_0^1 = \\frac{1^2}{2} - \\frac{0^2}{2} = \\frac{1}{2}$$
 
 再计算第二部分：
 当 $1 \\leq x \\leq 2$ 时，$f(x) = 2-x$：
-$$
-\\begin{aligned}
-\\int_1^2 (2-x) dx &= \\int_1^2 2 dx - \\int_1^2 x dx \\\\
-&= \\left.2x\\right|_1^2 - \\left.\\frac{x^2}{2}\\right|_1^2 \\\\
-&= (2\\cdot2 - 2\\cdot1) - \\left(\\frac{2^2}{2} - \\frac{1^2}{2}\\right) \\\\
-&= (4 - 2) - (2 - 0.5) \\\\
-&= 2 - 1.5 \\\\
-&= 0.5 = \\frac{1}{2}
-\\end{aligned}
-$$
+$$\\int_1^2 (2-x) dx = \\left.2x\\right|_1^2 - \\left.\\frac{x^2}{2}\\right|_1^2 = (4 - 2) - (2 - 0.5) = 2 - 1.5 = 0.5 = \\frac{1}{2}$$
 
 将两部分结果相加：
-$$
-\\int_0^2 f(x) dx = \\frac{1}{2} + \\frac{1}{2} = 1
-$$
+$$\\int_0^2 f(x) dx = \\frac{1}{2} + \\frac{1}{2} = 1$$
 
-几何验证：
-函数在区间 $[0,2]$ 上的图像构成底为2、高为1的三角形，其面积：
-$$S = \\frac{1}{2} \\times 底 \\times 高 = \\frac{1}{2} \\times 2 \\times 1 = 1$$
-
-计算结果与几何分析一致，故 $\\int_0^2 f(x) dx = 1$。`,
+`,
     answer: "1",
     difficulty: "medium",
     category: "定积分计算",
@@ -745,11 +724,7 @@ $$\\int_{-\\frac{\\pi}{4}}^{\\frac{\\pi}{4}} \\frac{x^3}{1+\\cos x}dx = 0$$
     question: "8.求广义积分 $\\int_0^{+\\infty} x e^{x} dx$",
     explanation: `计算广义积分 $\\int_0^{+\\infty} x e^{x} dx$。
 首先，我们可以使用分部积分法：
-$$\\begin{aligned}
-\\int x e^{x} dx &= \\int x d(e^x) \\quad (e^x dx = de^x) \\\\
-&= x e^x - \\int e^x dx \\\\
-&= x e^x - e^x + C
-\\end{aligned}$$
+$$\\int x e^{x} dx = x e^x - e^x + C$$
 现在计算定积分：
 $$(x e^x - e^x)\\bigg|_0^{+\\infty} = \\lim\\limits_{x \\to +\\infty}(x e^x - e^x) - (0 \\cdot e^0 - e^0)$$
 $$= \\lim\\limits_{x \\to +\\infty}(x e^x - e^x) - (0 - 1)$$

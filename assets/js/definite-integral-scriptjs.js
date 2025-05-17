@@ -666,6 +666,7 @@ function renderAllExercises() {
                         <div class="exercise-actions">
                             <button class="solution-toggle" data-exercise-id="${exercise.id}"><i class="fas fa-lightbulb"></i> 查看解析</button>
                             <button class="ai-analysis-btn" data-exercise-id="${exercise.id}"><i class="fas fa-robot"></i> AI分析</button>
+                            <button class="fullscreen-btn" data-exercise-id="${exercise.id}"><i class="fas fa-expand"></i> 全屏模式</button>
                         </div>
                         <div id="solution-${exercise.id}" class="solution-content">
                             ${needsPlot ? `

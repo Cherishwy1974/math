@@ -32,7 +32,7 @@
             position: relative;
             transition: background-color 0.2s ease;
         }
-        
+
         .filter-btn.active {
             background-color: var(--primary-color);
             color: white;
@@ -66,6 +66,32 @@
         }
 
         .ai-analysis-btn i {
+            margin-right: 6px;
+            font-size: 14px;
+        }
+
+        /* 全屏按钮样式 */
+        .fullscreen-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 14px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            margin: 10px 0;
+            margin-left: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .fullscreen-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .fullscreen-btn i {
             margin-right: 6px;
             font-size: 14px;
         }
@@ -407,10 +433,10 @@
     <!-- 先加载CSS -->
     <link rel="preload" href="fontawesome/css/all.min.css" as="style">
     <link rel="stylesheet" href="fontawesome/css/all.min.css" media="print" onload="this.media='all'">
-    
+
     <!-- 声网对话式AI引擎集成 -->
     <script src="js/agora-convo-ai.js"></script>
-    
+
     <!-- 语音对话功能 -->
     <script src="js/voice-chat.js" defer></script>
     <noscript>
@@ -1112,7 +1138,7 @@
             box-shadow: 0 4px 8px rgba(44, 76, 195, 0.3);
         }
 
- 
+
 
         .start-btn {
             background: white;
@@ -1158,6 +1184,7 @@
             }
 
         }
+
         /* 筛选器和题目定位器样式 */
         .filter-section {
             margin-bottom: 25px;
@@ -2260,6 +2287,2617 @@
             }
         });
     </script>
-</body>
 
+    <!-- 全屏模式紧急修复脚本 -->
+    <script>
+        // 全屏模式紧急修复脚本
+        (function () {
+            console.log('全屏模式紧急修复脚本已加载');
+
+            // 直接添加样式
+            const style = document.createElement('style');
+            style.textContent = `
+                .fullscreen-btn {
+                    display: inline-flex !important;
+                    align-items: center !important;
+                    padding: 8px 16px !important;
+                    background: #3498db !important;
+                    color: white !important;
+                    border: none !important;
+                    border-radius: 20px !important;
+                    cursor: pointer !important;
+                    font-size: 14px !important;
+                    font-weight: 500 !important;
+                    margin: 10px 0 !important;
+                    margin-left: 5px !important;
+                    transition: background-color 0.3s ease !important;
+                }
+                
+                .fullscreen-btn:hover {
+                    background-color: #2980b9 !important;
+                }
+                
+                .fullscreen-btn i {
+                    margin-right: 8px !important;
+                    font-size: 16px !important;
+                }
+            `;
+            document.head.appendChild(style);
+
+            // 添加全屏按钮函数
+            function addFullscreenButtons() {
+                // 查找所有习题操作区域
+                document.querySelectorAll('.exercise-actions').forEach(actionDiv => {
+                    // 检查是否已经有全屏按钮
+                    if (!actionDiv.querySelector('.fullscreen-btn')) {
+                        // 获取习题ID
+                        const exerciseItem = actionDiv.closest('.exercise-item');
+                        if (!exerciseItem) return;
+
+                        const exerciseId = exerciseItem.getAttribute('data-id');
+                        if (!exerciseId) return;
+
+                        // 创建全屏按钮
+                        const fullscreenBtn = document.createElement('button');
+                        fullscreenBtn.className = 'fullscreen-btn';
+                        fullscreenBtn.setAttribute('data-exercise-id', exerciseId);
+                        fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i> 全屏模式';
+
+                        // 直接设置onclick事件处理
+                        fullscreenBtn.onclick = function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            console.log('点击全屏按钮，习题ID:', exerciseId);
+
+                            try {
+                                // 保存所有习题数据到localStorage
+                                if (window.ExerciseManager && Array.isArray(window.ExerciseManager.exercises)) {
+                                    localStorage.setItem('fullscreenExercises',
+                                        JSON.stringify(window.ExerciseManager.exercises));
+                                    console.log('习题数据已保存到localStorage');
+                                } else if (window.exerciseData && Array.isArray(window.exerciseData.exercises)) {
+                                    localStorage.setItem('fullscreenExercises',
+                                        JSON.stringify(window.exerciseData.exercises));
+                                    console.log('使用exerciseData保存习题数据');
+                                } else {
+                                    console.warn('无法找到习题数据');
+                                    alert('无法找到习题数据，全屏模式可能无法正常工作');
+                                }
+
+                                // 跳转到全屏页面
+                                window.location.href = 'fullscreen-page.html?id=' + exerciseId;
+                            } catch (error) {
+                                console.error('全屏模式跳转出错:', error);
+                                alert('全屏模式加载失败: ' + error.message);
+                            }
+
+                            return false;
+                        };
+
+                        // 添加到操作容器
+                        actionDiv.appendChild(fullscreenBtn);
+                    }
+                });
+            }
+
+            // 页面加载完成后执行
+            function init() {
+                console.log('添加全屏按钮...');
+                addFullscreenButtons();
+
+                // 定期检查是否有新的习题项目需要添加全屏按钮
+                setInterval(addFullscreenButtons, 2000);
+            }
+
+            // 确保在DOM加载完成后执行
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function () {
+                    setTimeout(init, 1000);
+                });
+            } else {
+                setTimeout(init, 1000);
+            }
+
+            // 在加载完成后再次执行
+            window.addEventListener('load', function () {
+                setTimeout(init, 1000);
+            });
+        })();
+    </script>
+
+    <!-- 内嵌式全屏模式容器 -->
+    <div id="inline-fullscreen-container"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; flex-direction: column;">
+        <header
+            style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background-color: #2c4cc3; color: white; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+            <div style="font-size: 1.2rem; font-weight: bold; display: flex; align-items: center;">
+                <i class="fas fa-expand" style="margin-right: 10px;"></i> 定积分题目全屏展示
+            </div>
+            <div style="display: flex; gap: 15px;">
+                <button id="inline-speed-btn"
+                    style="background: rgba(255, 255, 255, 0.2); border: none; color: white; border-radius: 4px; padding: 6px 12px; cursor: pointer; display: flex; align-items: center; font-size: 14px;">
+                    <i class="fas fa-tachometer-alt" style="margin-right: 6px;"></i> 标准速度
+                </button>
+                <button id="inline-close-btn"
+                    style="background: rgba(255, 255, 255, 0.2); border: none; color: white; border-radius: 4px; padding: 6px 12px; cursor: pointer; display: flex; align-items: center; font-size: 14px;">
+                    <i class="fas fa-times" style="margin-right: 6px;"></i> 关闭全屏
+                </button>
+            </div>
+        </header>
+
+        <div id="inline-slide-container" style="flex: 1; overflow: auto; padding: 20px; background-color: #f8f9fa;">
+            <!-- 幻灯片内容会动态生成 -->
+        </div>
+
+        <div
+            style="display: flex; justify-content: space-between; padding: 15px; background: white; border-top: 1px solid #e2e8f0;">
+            <button id="inline-prev-slide"
+                style="display: flex; align-items: center; padding: 8px 15px; border: none; border-radius: 4px; background: #2c4cc3; color: white; cursor: pointer;">
+                <i class="fas fa-chevron-left" style="margin-right: 6px;"></i> 上一题
+            </button>
+            <div style="display: flex; align-items: center; font-size: 0.9rem; color: #343a40;">
+                题目 <span id="inline-current-slide">1</span> / <span id="inline-total-slides">N</span>
+            </div>
+            <button id="inline-next-slide"
+                style="display: flex; align-items: center; padding: 8px 15px; border: none; border-radius: 4px; background: #2c4cc3; color: white; cursor: pointer;">
+                下一题 <i class="fas fa-chevron-right" style="margin-left: 6px;"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 内嵌式全屏模式功能
+        (function () {
+            // 全局变量
+            let exercises = [];
+            let currentSlideIndex = 0;
+            let typingSpeed = 30; // 毫秒/字符
+            let isTyping = false;
+            let typingTimeout = null;
+
+            // 在页面加载完成后初始化全屏按钮
+            document.addEventListener('DOMContentLoaded', function () {
+                // 添加全屏按钮样式
+                const style = document.createElement('style');
+                style.textContent = `
+                .fullscreen-btn {
+                    display: inline-flex !important;
+                    align-items: center !important;
+                    padding: 8px 16px !important;
+                    background: #3498db !important;
+                    color: white !important;
+                    border: none !important;
+                    border-radius: 20px !important;
+                    cursor: pointer !important;
+                    font-size: 14px !important;
+                    font-weight: 500 !important;
+                    margin: 10px 0 !important;
+                    margin-left: 5px !important;
+                    transition: background-color 0.3s ease !important;
+                }
+                
+                .fullscreen-btn:hover {
+                    background-color: #2980b9 !important;
+                }
+                
+                .fullscreen-btn i {
+                    margin-right: 8px !important;
+                    font-size: 16px !important;
+                }
+                
+                /* 全屏模式样式 */
+                .inline-slide {
+                    background: white;
+                    border-radius: 8px;
+                    padding: 20px;
+                    margin-bottom: 20px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }
+                
+                .inline-exercise-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 20px;
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid #e2e8f0;
+                }
+                
+                .inline-exercise-title-wrapper {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                }
+                
+                .inline-exercise-number {
+                    background: #2c4cc3;
+                    color: white;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 1.1rem;
+                }
+                
+                .inline-exercise-title {
+                    font-size: 1.5rem;
+                    margin: 0;
+                    color: #2c3e50;
+                }
+                
+                .inline-exercise-meta {
+                    display: flex;
+                    gap: 10px;
+                    flex-wrap: wrap;
+                }
+                
+                .inline-exercise-tag {
+                    padding: 4px 12px;
+                    border-radius: 20px;
+                    font-size: 0.85rem;
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                }
+                
+                .inline-exercise-tag i {
+                    margin-right: 6px;
+                }
+                
+                .inline-exercise-tag.type {
+                    background: #3498db;
+                }
+                
+                .inline-exercise-tag.difficulty {
+                    background: #e74c3c;
+                }
+                
+                .inline-exercise-tag.category {
+                    background: #9b59b6;
+                }
+                
+                .inline-exercise-tag.method {
+                    background: #34495e;
+                }
+                
+                .inline-exercise-tag.difficulty.easy {
+                    background: #2ecc71;
+                }
+                
+                .inline-exercise-tag.difficulty.medium {
+                    background: #f39c12;
+                }
+                
+                .inline-exercise-tag.difficulty.hard {
+                    background: #e74c3c;
+                }
+                
+                .inline-exercise-question {
+                    font-size: 1.2rem;
+                    margin-bottom: 30px;
+                    padding: 20px;
+                    background: #f5f7fa;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                }
+                
+                .inline-solution-section {
+                    position: relative;
+                }
+                
+                .inline-toggle-solution-btn {
+                    padding: 8px 16px;
+                    background: #2c4cc3;
+                    color: white;
+                    border: none;
+                    border-radius: 20px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    margin-bottom: 20px;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    transition: background 0.3s;
+                }
+                
+                .inline-toggle-solution-btn:hover {
+                    background: #1a3cb3;
+                }
+                
+                .inline-solution-content {
+                    background: white;
+                    border-radius: 8px;
+                    padding: 0;
+                    overflow: hidden;
+                    max-height: 0;
+                    opacity: 0;
+                    transition: max-height 0.5s, opacity 0.5s, padding 0.5s;
+                }
+                
+                .inline-solution-content.show {
+                    max-height: 2000px;
+                    padding: 20px;
+                    opacity: 1;
+                    margin-bottom: 20px;
+                    border: 1px solid #e2e8f0;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }
+                
+                .inline-solution-text {
+                    white-space: pre-wrap;
+                    display: inline;
+                }
+                
+                .inline-typing-cursor {
+                    display: inline-block;
+                    width: 2px;
+                    height: 20px;
+                    background-color: #333;
+                    margin-left: 2px;
+                    animation: blink 0.7s infinite;
+                }
+                
+                @keyframes blink {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0; }
+                }
+                
+                .inline-explanation, .inline-answer {
+                    margin-bottom: 25px;
+                }
+                
+                .inline-explanation h4, .inline-answer h4 {
+                    color: #2c4cc3;
+                    display: flex;
+                    align-items: center;
+                    margin-top: 0;
+                    margin-bottom: 10px;
+                    font-size: 1.2rem;
+                    padding-left: 10px;
+                    border-left: 4px solid #2c4cc3;
+                }
+                
+                .inline-explanation h4 i, .inline-answer h4 i {
+                    margin-right: 8px;
+                }
+                
+                .inline-image-container {
+                    margin: 20px 0;
+                    text-align: center;
+                }
+                
+                .inline-solution-image {
+                    max-width: 70%;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+                
+                /* 增强的打字光标样式 */
+                .inline-typing-cursor {
+                    display: inline-block;
+                    width: 2px;
+                    height: 1.2em;
+                    background-color: #333;
+                    margin-left: 2px;
+                    vertical-align: middle;
+                    animation: blink 0.7s infinite;
+                }
+                
+                @keyframes blink {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0; }
+                }
+                
+                /* 段落样式，提高可读性 */
+                .inline-solution-text p,
+                .inline-solution-text br + span {
+                    margin-top: 0.8em;
+                    display: block;
+                }
+                
+                /* 为段落添加淡入效果 */
+                .inline-solution-text span {
+                    display: inline-block;
+                    animation: fadeIn 0.3s ease;
+                }
+                
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                
+                /* 确保数学公式正确显示 */
+                .inline-solution-text .MathJax {
+                    margin: 0.5em 0;
+                }
+            `;
+                document.head.appendChild(style);
+
+                // 添加全屏按钮
+                function addFullscreenButtons() {
+                    // 查找所有习题操作区域
+                    document.querySelectorAll('.exercise-item').forEach(exerciseItem => {
+                        // 获取习题ID
+                        const exerciseId = exerciseItem.getAttribute('data-id');
+                        if (!exerciseId) return;
+
+                        // 查找操作区域
+                        let actionsDiv = exerciseItem.querySelector('.exercise-actions');
+
+                        // 如果不存在操作区域，创建一个
+                        if (!actionsDiv) {
+                            const exerciseContent = exerciseItem.querySelector('.exercise-content');
+                            if (!exerciseContent) return;
+
+                            actionsDiv = document.createElement('div');
+                            actionsDiv.className = 'exercise-actions';
+
+                            // 在问题之后插入操作区域
+                            const questionDiv = exerciseContent.querySelector('.exercise-question');
+                            if (questionDiv) {
+                                questionDiv.insertAdjacentElement('afterend', actionsDiv);
+                            } else {
+                                exerciseContent.appendChild(actionsDiv);
+                            }
+                        }
+
+                        // 检查是否已经有全屏按钮
+                        if (!actionsDiv.querySelector('.fullscreen-btn')) {
+                            // 创建全屏按钮
+                            const fullscreenBtn = document.createElement('button');
+                            fullscreenBtn.className = 'fullscreen-btn';
+                            fullscreenBtn.setAttribute('data-exercise-id', exerciseId);
+                            fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i> 全屏模式';
+
+                            // 直接设置onclick事件处理
+                            fullscreenBtn.onclick = function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+
+                                console.log('点击全屏按钮，习题ID:', exerciseId);
+
+                                try {
+                                    // 获取习题数据
+                                    let exercisesData = [];
+                                    if (window.ExerciseManager && Array.isArray(window.ExerciseManager.exercises)) {
+                                        exercisesData = window.ExerciseManager.exercises;
+                                        console.log('从ExerciseManager获取习题数据');
+                                    } else if (window.exerciseData && Array.isArray(window.exerciseData.exercises)) {
+                                        exercisesData = window.exerciseData.exercises;
+                                        console.log('从exerciseData获取习题数据');
+                                    } else {
+                                        console.warn('无法找到习题数据');
+                                        alert('无法找到习题数据，全屏模式可能无法正常工作');
+                                        return;
+                                    }
+
+                                    // 直接使用
+                                    showInlineFullscreen(exercisesData, exerciseId);
+                                } catch (error) {
+                                    console.error('全屏模式加载出错:', error);
+                                    alert('全屏模式加载失败: ' + error.message);
+                                }
+
+                                return false;
+                            };
+
+                            // 添加到操作容器
+                            actionsDiv.appendChild(fullscreenBtn);
+                        }
+                    });
+                }
+
+                // 初始化事件处理
+                function initEventHandlers() {
+                    // 关闭按钮
+                    document.getElementById('inline-close-btn').addEventListener('click', function () {
+                        document.getElementById('inline-fullscreen-container').style.display = 'none';
+                        document.body.style.overflow = ''; // 恢复滚动
+                    });
+
+                    // 速度切换按钮
+                    document.getElementById('inline-speed-btn').addEventListener('click', function () {
+                        if (typingSpeed === 30) {
+                            typingSpeed = 10; // 快速
+                            this.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 6px;"></i> 快速打字';
+                        } else if (typingSpeed === 10) {
+                            typingSpeed = 0; // 立即显示
+                            this.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 6px;"></i> 立即显示';
+                        } else {
+                            typingSpeed = 30; // 标准
+                            this.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 6px;"></i> 标准速度';
+                        }
+
+                        // 如果当前正在显示解析，重新开始打字效果
+                        const currentSlide = document.getElementById(`inline-slide-${currentSlideIndex}`);
+                        if (currentSlide) {
+                            const solutionContent = currentSlide.querySelector('.inline-solution-content.show');
+                            if (solutionContent) {
+                                const solutionText = currentSlide.querySelector('.inline-solution-text');
+                                const cursor = currentSlide.querySelector('.inline-typing-cursor');
+                                const exercise = exercises[currentSlideIndex];
+
+                                if (typingSpeed === 0) {
+                                    // 立即显示全部
+                                    solutionText.innerHTML = exercise.explanation;
+                                    cursor.style.display = 'none';
+
+                                    // 重新渲染公式
+                                    if (window.MathJax && window.MathJax.typesetPromise) {
+                                        window.MathJax.typesetPromise([solutionContent])
+                                            .catch(err => console.warn('MathJax渲染错误:', err));
+                                    }
+                                } else {
+                                    // 重新开始打字效果
+                                    if (isTyping) {
+                                        clearTimeout(typingTimeout);
+                                        isTyping = false;
+                                    }
+                                    startTypingEffect(solutionText, cursor, exercise.explanation, currentSlideIndex);
+                                }
+                            }
+                        }
+                    });
+
+                    // 上一题按钮
+                    document.getElementById('inline-prev-slide').addEventListener('click', function () {
+                        if (currentSlideIndex > 0) {
+                            goToSlide(currentSlideIndex - 1);
+                        }
+                    });
+
+                    // 下一题按钮
+                    document.getElementById('inline-next-slide').addEventListener('click', function () {
+                        if (currentSlideIndex < exercises.length - 1) {
+                            goToSlide(currentSlideIndex + 1);
+                        }
+                    });
+
+                    // 键盘事件
+                    document.addEventListener('keydown', function (e) {
+                        // 只有在全屏模式显示时才处理
+                        if (document.getElementById('inline-fullscreen-container').style.display !== 'flex') {
+                            return;
+                        }
+
+                        if (e.key === 'ArrowLeft') {
+                            // 左箭头 - 上一题
+                            if (currentSlideIndex > 0) {
+                                goToSlide(currentSlideIndex - 1);
+                            }
+                        } else if (e.key === 'ArrowRight' || e.key === ' ') {
+                            // 右箭头或空格 - 下一题
+                            if (currentSlideIndex < exercises.length - 1) {
+                                goToSlide(currentSlideIndex + 1);
+                            }
+                        } else if (e.key === 'Escape') {
+                            // ESC - 关闭全屏
+                            document.getElementById('inline-fullscreen-container').style.display = 'none';
+                            document.body.style.overflow = ''; // 恢复滚动
+                        }
+                    });
+                }
+
+                // 显示内嵌全屏模式
+                function showInlineFullscreen(exercisesData, initialExerciseId) {
+                    // 保存习题数据
+                    exercises = exercisesData;
+
+                    // 查找初始习题索引
+                    let initialIndex = 0;
+                    if (initialExerciseId) {
+                        const index = exercises.findIndex(ex => ex.id == initialExerciseId);
+                        if (index !== -1) {
+                            initialIndex = index;
+                        }
+                    }
+                    currentSlideIndex = initialIndex;
+
+                    // 渲染幻灯片
+                    renderSlides();
+
+                    // 显示全屏容器
+                    const container = document.getElementById('inline-fullscreen-container');
+                    container.style.display = 'flex';
+
+                    // 锁定背景滚动
+                    document.body.style.overflow = 'hidden';
+
+                    // 滚动到顶部
+                    container.scrollTop = 0;
+
+                    // 更新计数器
+                    updateCounter();
+
+                    // 更新导航按钮状态
+                    updateNavButtons();
+                }
+
+                // 渲染所有幻灯片
+                function renderSlides() {
+                    const container = document.getElementById('inline-slide-container');
+                    container.innerHTML = '';
+
+                    exercises.forEach((exercise, index) => {
+                        const slide = document.createElement('div');
+                        slide.className = `inline-slide ${index === currentSlideIndex ? '' : 'slide-hidden'}`;
+                        slide.id = `inline-slide-${index}`;
+                        slide.style.display = index === currentSlideIndex ? 'block' : 'none';
+
+                        // 获取难度文本
+                        const difficultyText = getDifficultyText(exercise.difficulty);
+
+                        // 判断是否需要显示图片
+                        const needsPlot = ['30', '31', '32', '33', '34', '37', '38', '39', '49', '50'].includes(exercise.id.toString());
+
+                        slide.innerHTML = `
+                        <div class="inline-exercise-header">
+                            <div class="inline-exercise-title-wrapper">
+                                <div class="inline-exercise-number">${exercise.id}</div>
+                                <h3 class="inline-exercise-title">${exercise.title}</h3>
+                            </div>
+                            <div class="inline-exercise-meta">
+                                <div class="inline-exercise-tag type"><i class="fas fa-tag"></i> ${exercise.type}</div>
+                                <div class="inline-exercise-tag difficulty ${exercise.difficulty}"><i class="fas fa-signal"></i> ${difficultyText}</div>
+                                <div class="inline-exercise-tag category"><i class="fas fa-folder"></i> ${exercise.category}</div>
+                                ${exercise.method ? `<div class="inline-exercise-tag method"><i class="fas fa-cogs"></i> ${exercise.method}</div>` : ''}
+                            </div>
+                        </div>
+                        <div class="inline-exercise-question">${exercise.question}</div>
+                        <div class="inline-solution-section">
+                            <button class="inline-toggle-solution-btn" data-slide="${index}">
+                                <i class="fas fa-lightbulb"></i> 显示解析
+                            </button>
+                            <div class="inline-solution-content" id="inline-solution-${index}">
+                                ${needsPlot ? `
+                                <div class="inline-image-container">
+                                    <img src="../images/plots/plot-${exercise.id}.png" alt="函数图像" class="inline-solution-image">
+                                </div>
+                                ` : ''}
+                                <div class="inline-explanation">
+                                    <h4><i class="fas fa-chalkboard-teacher"></i> 解析</h4>
+                                    <div class="inline-explanation-text">
+                                        <div class="inline-solution-text" id="inline-solution-text-${index}"></div>
+                                        <span class="inline-typing-cursor" id="inline-cursor-${index}" style="display: none;"></span>
+                                    </div>
+                                </div>
+                                <div class="inline-answer">
+                                    <h4><i class="fas fa-check-circle"></i> 答案</h4>
+                                    <div>${exercise.answer}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                        container.appendChild(slide);
+                    });
+
+                    // 给每个解析按钮添加点击事件
+                    document.querySelectorAll('.inline-toggle-solution-btn').forEach(btn => {
+                        btn.addEventListener('click', function () {
+                            const slideIndex = parseInt(this.getAttribute('data-slide'));
+                            const solutionContent = document.getElementById(`inline-solution-${slideIndex}`);
+                            const solutionText = document.getElementById(`inline-solution-text-${slideIndex}`);
+                            const cursor = document.getElementById(`inline-cursor-${slideIndex}`);
+
+                            if (!solutionContent) {
+                                console.error('Solution content DOM element not found.');
+                                return; // Exit if the main content area is missing
+                            }
+
+                            if (solutionContent.classList.contains('user-clicked')) {
+                                // Action: Hide the solution
+                                solutionContent.classList.remove('user-clicked', 'show'); // Remove 'user-clicked' and 'show' (if present)
+
+                                // Apply styles to hide (these mirror the default CSS state for .inline-solution-content)
+                                solutionContent.style.maxHeight = '0';
+                                solutionContent.style.opacity = '0';
+                                solutionContent.style.padding = '0';
+                                solutionContent.style.visibility = 'hidden';
+                                // solutionContent.style.display = 'none'; // CSS without user-clicked should already handle this.
+
+                                this.innerHTML = '<i class="fas fa-lightbulb"></i> 显示解析'; // Update button text/icon
+
+                                // Stop any ongoing typing animation
+                                if (window.isTyping) {
+                                    clearTimeout(window.typingTimeout);
+                                    window.isTyping = false;
+                                }
+                                if (cursor) { // Check if cursor element exists
+                                    cursor.style.display = 'none';
+                                }
+
+                            } else {
+                                // Action: Show the solution
+                                solutionContent.classList.add('user-clicked'); // Add 'user-clicked' to trigger CSS for showing
+
+                                // Apply styles to show (these mirror the CSS for .inline-solution-content.user-clicked)
+                                solutionContent.style.maxHeight = '2000px'; // Or a more dynamic value like 'none' or scrollHeight if calculated
+                                solutionContent.style.opacity = '1';
+                                solutionContent.style.padding = '20px';
+                                solutionContent.style.visibility = 'visible';
+                                solutionContent.style.display = 'block'; // Ensure it's displayed as a block
+
+                                this.innerHTML = '<i class="fas fa-eye-slash"></i> 隐藏解析'; // Update button text/icon
+
+                                // Retrieve the exercise data for the current slide
+                                const exercises = window.fullscreenExercises || []; // Use global exercises data
+                                const exercise = exercises[slideIndex];
+
+                                if (!exercise) {
+                                    console.error('Cannot find exercise data for slide index:', slideIndex);
+                                    if (solutionText) { // Check if solutionText element exists
+                                        // Display error directly if data is missing
+                                        solutionText.innerHTML = "错误：无法加载解析内容。";
+                                    }
+                                    return; // Exit if no exercise data
+                                }
+                                const exerciseExplanation = exercise.explanation;
+
+                                // Ensure solutionText and cursor elements are valid before using them
+                                if (solutionText && cursor) {
+                                    if (window.typingSpeed === 0) {
+                                        // Immediate display of the full explanation
+                                        solutionText.innerHTML = exerciseExplanation; // Consider using a sanitizer or careful formatting if explanation contains HTML
+                                        cursor.style.display = 'none';
+
+                                        // Re-render MathJax formulas for the immediately displayed content
+                                        if (window.MathJax) {
+                                            if (window.MathJax.typesetPromise) {
+                                                window.MathJax.typesetPromise([solutionContent])
+                                                    .catch(err => console.warn('MathJax rendering error (immediate display):', err));
+                                            } else if (window.MathJax.Hub) {
+                                                window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub, solutionContent]);
+                                            }
+                                        }
+                                    } else {
+                                        // Start the typing animation effect
+                                        if (typeof window.startTypingEffect === 'function') {
+                                            window.startTypingEffect(solutionText, cursor, exerciseExplanation, slideIndex);
+                                        } else {
+                                            console.error("startTypingEffect function is not defined. Displaying content directly.");
+                                            // Fallback: display content directly if typing effect function is missing
+                                            solutionText.innerHTML = exerciseExplanation;
+                                            if (cursor) cursor.style.display = 'none';
+                                            // Also render MathJax in this fallback case
+                                            if (window.MathJax) {
+                                                if (window.MathJax.typesetPromise) {
+                                                    window.MathJax.typesetPromise([solutionContent])
+                                                        .catch(err => console.warn('MathJax rendering error (fallback display):', err));
+                                                } else if (window.MathJax.Hub) {
+                                                    window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub, solutionContent]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    console.error("Solution text or cursor DOM element not found for typing effect. Content may not display correctly.");
+                                    // Fallback if essential elements for typing are missing: try to display explanation directly in solutionContent
+                                    solutionContent.innerHTML = `<div class="inline-explanation"><h4><i class="fas fa-chalkboard-teacher"></i> 解析</h4><div class="explanation-content">${exerciseExplanation}</div></div>`; // Basic structure
+                                    if (window.MathJax) { // Try to render MathJax anyway
+                                        if (window.MathJax.typesetPromise) {
+                                            window.MathJax.typesetPromise([solutionContent]).catch(err => console.warn('MathJax rendering error (elements missing fallback):', err));
+                                        } else if (window.MathJax.Hub) {
+                                            window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub, solutionContent]);
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    });
+
+                    // 渲染数学公式
+                    if (window.MathJax && window.MathJax.typesetPromise) {
+                        window.MathJax.typesetPromise()
+                            .catch(err => console.warn('MathJax渲染错误:', err));
+                    }
+                }
+
+                // 切换到指定幻灯片
+                function goToSlide(index) {
+                    if (index < 0 || index >= exercises.length) return;
+
+                    // 更新当前幻灯片索引
+                    const prevIndex = currentSlideIndex;
+                    currentSlideIndex = index;
+
+                    // 更新幻灯片显示
+                    const prevSlide = document.getElementById(`inline-slide-${prevIndex}`);
+                    const currentSlide = document.getElementById(`inline-slide-${index}`);
+
+                    if (prevSlide) prevSlide.style.display = 'none';
+                    if (currentSlide) currentSlide.style.display = 'block';
+
+                    // 更新计数器和导航按钮
+                    updateCounter();
+                    updateNavButtons();
+
+                    // 重置行计数和解析显示状态
+                    window.currentLine = 0;
+                    window.totalLines = 0;
+                    window.solutionLines = [];
+
+                    // 隐藏解析
+                    const prevSolution = document.getElementById(`inline-solution-${prevIndex}`);
+                    const prevButton = document.querySelector(`.inline-toggle-solution-btn[data-slide="${prevIndex}"]`);
+
+                    if (prevSolution && prevSolution.classList.contains('show')) {
+                        prevSolution.classList.remove('show');
+                        if (prevButton) prevButton.innerHTML = '<i class="fas fa-lightbulb"></i> 显示解析';
+                    }
+
+                    // 滚动到顶部
+                    document.getElementById('inline-slide-container').scrollTop = 0;
+
+                    // 渲染数学公式
+                    if (window.MathJax && window.MathJax.typesetPromise) {
+                        window.MathJax.typesetPromise([currentSlide])
+                            .catch(err => console.warn('MathJax渲染错误:', err));
+                    }
+                }
+
+                // 全局变量，用于跟踪当前显示的行
+                window.currentLine = 0;
+                window.totalLines = 0;
+                window.solutionLines = [];
+
+                /**
+                 * 按行显示解析内容的函数
+                 * @param {number} slideIndex - 当前幻灯片的索引
+                 * @param {boolean} isClick - 是否由点击事件触发
+                 */
+                function showNextLine(slideIndex, isClick = false) {
+                    // 获取解析文本元素
+                    const solutionText = document.getElementById(`inline-solution-text-${slideIndex}`);
+                    if (!solutionText) {
+                        console.error('找不到解析文本元素，slideIndex:', slideIndex);
+                        return;
+                    }
+
+                    // 初始化行数据（如果是第一次调用）
+                    if (window.currentLine === 0 || !window.solutionLines?.length) {
+                        if (!initializeSolutionLines(slideIndex, solutionText)) {
+                            return; // 初始化失败则退出
+                        }
+                    }
+
+
+                    // 显示下一行内容（如果还有未显示的行）
+                    if (window.currentLine < window.totalLines) {
+                        displayNextLine(slideIndex, solutionText, isClick);
+                    } else if (window.currentLine >= window.totalLines && window.totalLines > 0) {
+                        // 所有行已显示完毕，更新按钮状态
+                        updateToggleButton(slideIndex, true);
+                    }
+                }
+
+
+                /**
+                 * 初始化解析行数据
+                 * @param {number} slideIndex - 当前幻灯片的索引
+                 * @param {HTMLElement} solutionText - 解析文本容器元素
+                 * @returns {boolean} 初始化是否成功
+                 */
+                function initializeSolutionLines(slideIndex, solutionText) {
+                    // 验证习题数据
+                    if (!window.fullscreenExercises || !Array.isArray(window.fullscreenExercises)) {
+                        console.error('习题数据未正确加载');
+                        return false;
+                    }
+
+
+                    // 验证slideIndex范围
+                    if (slideIndex < 0 || slideIndex >= window.fullscreenExercises.length) {
+                        console.error('无效的slideIndex:', slideIndex);
+                        return false;
+                    }
+
+
+                    // 获取当前习题
+                    const exercise = window.fullscreenExercises[slideIndex];
+                    if (!exercise?.explanation) {
+                        console.error('找不到习题数据或解析内容，slideIndex:', slideIndex);
+                        return false;
+                    }
+
+
+                    try {
+                        // 分割解析内容为行，按句子或换行符分割
+                        window.solutionLines = exercise.explanation
+                            .split(/(?<=[.!?])\s+|(?<=\n)\s*(?=\S)/g)
+                            .filter(p => p?.trim().length > 0);
+                        
+                        window.totalLines = window.solutionLines.length;
+                        window.currentLine = 0; // 重置当前行索引
+                        
+                        // 清空解析文本区域
+                        solutionText.innerHTML = '';
+                        
+                        // 更新按钮文本
+                        updateToggleButton(slideIndex, false);
+                        
+                        return true;
+                    } catch (error) {
+                        console.error('初始化解析行数据时出错:', error);
+                        return false;
+                    }
+                }
+
+
+                /**
+                 * 显示下一行内容
+                 * @param {number} slideIndex - 当前幻灯片的索引
+                 * @param {HTMLElement} solutionText - 解析文本容器元素
+                 * @param {boolean} isClick - 是否由点击事件触发
+                 */
+                function displayNextLine(slideIndex, solutionText, isClick) {
+                    try {
+                        // 获取当前行内容
+                        const lineContent = window.solutionLines[window.currentLine];
+                        if (!lineContent) {
+                            console.warn('未找到当前行的内容');
+                            return;
+                        }
+                        
+                        // 创建并添加新行
+                        const newParagraph = document.createElement('div');
+                        newParagraph.className = 'solution-paragraph';
+                        newParagraph.innerHTML = lineContent;
+                        solutionText.appendChild(newParagraph);
+                        
+                        // 更新行计数
+                        window.currentLine++;
+                        
+                        // 更新按钮状态
+                        updateToggleButton(slideIndex, false);
+                        
+                        // 渲染数学公式
+                        if (window.MathJax?.typesetPromise) {
+                            window.MathJax.typesetPromise([solutionText])
+                                .catch(err => console.warn('MathJax渲染错误:', err));
+                        }
+                        
+                        // 自动滚动到新内容（仅在点击时）
+                        if (isClick) {
+                            requestAnimationFrame(() => {
+                                solutionText.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                            });
+                        }
+                    } catch (error) {
+                        console.error('显示下一行内容时出错:', error);
+                    }
+                }
+
+
+                /**
+                 * 更新切换按钮状态
+                 * @param {number} slideIndex - 当前幻灯片的索引
+                 * @param {boolean} isComplete - 是否已完全显示所有内容
+                 */
+                function updateToggleButton(slideIndex, isComplete) {
+                    try {
+                        const toggleButton = document.querySelector(`.inline-toggle-solution-btn[data-slide="${slideIndex}"]`);
+                        if (!toggleButton) {
+                            console.warn('未找到切换按钮，slideIndex:', slideIndex);
+                            return;
+                        }
+                        
+                        // 根据状态更新按钮文本和图标
+                        if (isComplete || window.currentLine >= window.totalLines) {
+                            toggleButton.innerHTML = '<i class="fas fa-check-circle"></i> 解析已完全显示';
+                        } else {
+                            toggleButton.innerHTML = `
+                                <i class="fas fa-arrow-down"></i> 
+                                显示下一行 (${window.currentLine}/${window.totalLines})
+                            `.trim();
+                        }
+                    } catch (error) {
+                        console.error('更新切换按钮状态时出错:', error);
+                    }
+                }
+
+                // 隐藏解析内容并重置行计数的函数
+                function resetSolutionDisplay(exerciseId) {
+                    window.currentLine = 0;
+                    window.totalLines = 0;
+                    window.solutionLines = [];
+
+                    const solutionText = document.getElementById(`inline-solution-text-${exerciseId}`);
+                    if (solutionText) {
+                        solutionText.innerHTML = '';
+                    }
+
+                    // 更新按钮文本
+                    const toggleButton = document.querySelector(`.inline-toggle-solution-btn[data-slide="${window.currentSlideIndex}"]`);
+                    if (toggleButton) {
+                        toggleButton.innerHTML = '<i class="fas fa-lightbulb"></i> 显示解析';
+                    }
+                }
+
+                // 禁用原有的打字效果函数
+                window.startTypingEffect = function () {
+                    console.log('打字效果已禁用，使用按行显示');
+                    return;
+                };
+
+                // 更新计数器
+                function updateCounter() {
+                    document.getElementById('inline-current-slide').textContent = currentSlideIndex + 1;
+                    document.getElementById('inline-total-slides').textContent = exercises.length;
+                }
+
+                // 更新导航按钮状态
+                function updateNavButtons() {
+                    document.getElementById('inline-prev-slide').disabled = currentSlideIndex === 0;
+                    document.getElementById('inline-next-slide').disabled = currentSlideIndex === exercises.length - 1;
+                }
+
+                // 获取难度文本
+                function getDifficultyText(difficulty) {
+                    switch (difficulty) {
+                        case 'easy': return '简单';
+                        case 'medium': return '中等';
+                        case 'hard': return '困难';
+                        default: return '中等';
+                    }
+                }
+
+                // 初始化事件处理
+                initEventHandlers();
+
+                // 定期添加全屏按钮，确保即使DOM动态变化也能添加按钮
+                setInterval(addFullscreenButtons, 2000);
+
+                // 立即添加全屏按钮
+                setTimeout(addFullscreenButtons, 1000);
+            });
+        })();
+    </script>
+
+    <!-- 全屏功能修复脚本 -->
+    <script>
+        // 全屏功能修复脚本
+        (function () {
+            console.log('开始修复全屏功能...');
+
+            // 将showInlineFullscreen函数暴露到全局作用域
+            window.showInlineFullscreen = function (exercisesData, initialExerciseId) {
+                console.log('调用全屏函数，习题ID:', initialExerciseId);
+
+                // 确保内联全屏容器存在
+                const container = document.getElementById('inline-fullscreen-container');
+                if (!container) {
+                    console.error('找不到全屏容器！');
+                    alert('全屏模式不可用：容器元素缺失');
+                    return;
+                }
+
+                try {
+                    // 保存习题数据到全局变量
+                    window.fullscreenExercises = exercisesData;
+
+                    // 查找初始习题索引
+                    let initialIndex = 0;
+                    if (initialExerciseId) {
+                        const index = exercisesData.findIndex(ex => ex.id == initialExerciseId);
+                        if (index !== -1) {
+                            initialIndex = index;
+                        }
+                    }
+
+                    // 设置当前习题索引
+                    window.currentSlideIndex = initialIndex;
+
+                    // 准备全屏内容
+                    const exercise = exercisesData[initialIndex];
+                    if (!exercise) {
+                        console.error('找不到习题数据！');
+                        alert('无法显示习题：数据不可用');
+                        return;
+                    }
+
+                    // 获取难度文本
+                    const difficultyText = getDifficultyText(exercise.difficulty);
+
+                    // 判断是否需要显示图片
+                    const needsPlot = ['30', '31', '32', '33', '34', '37', '38', '39', '49', '50'].includes(exercise.id.toString());
+
+                    // 在这里简单地显示全屏容器并填充内容
+                    const slideContainer = document.getElementById('inline-slide-container');
+                    if (slideContainer) {
+                        slideContainer.innerHTML = `
+                <div class="inline-slide" id="inline-slide-${initialIndex}">
+                    <div class="inline-exercise-header">
+                        <div class="inline-exercise-title-wrapper">
+                            <div class="inline-exercise-number">${exercise.id}</div>
+                            <h3 class="inline-exercise-title">${exercise.title}</h3>
+                        </div>
+                        <div class="inline-exercise-meta">
+                            <div class="inline-exercise-tag type"><i class="fas fa-tag"></i> ${exercise.type}</div>
+                            <div class="inline-exercise-tag difficulty ${exercise.difficulty}"><i class="fas fa-signal"></i> ${difficultyText}</div>
+                            <div class="inline-exercise-tag category"><i class="fas fa-folder"></i> ${exercise.category}</div>
+                            ${exercise.method ? `<div class="inline-exercise-tag method"><i class="fas fa-cogs"></i> ${exercise.method}</div>` : ''}
+                        </div>
+                    </div>
+                    <div class="inline-exercise-question">${exercise.question}</div>
+                    <div class="inline-solution-section">
+                        <button class="inline-toggle-solution-btn" data-slide="${initialIndex}">
+                            <i class="fas fa-lightbulb"></i> 显示解析
+                        </button>
+                        <div class="inline-solution-content" id="inline-solution-${initialIndex}">
+                            ${needsPlot ? `
+                            <div class="inline-image-container">
+                                <img src="../images/plots/plot-${exercise.id}.png" alt="函数图像" class="inline-solution-image">
+                            </div>
+                            ` : ''}
+                            <div class="inline-explanation">
+                                <h4><i class="fas fa-chalkboard-teacher"></i> 解析</h4>
+                                <div class="inline-explanation-text">
+                                    <div class="inline-solution-text" id="inline-solution-text-${initialIndex}"></div>
+                                    <span class="inline-typing-cursor" id="inline-cursor-${initialIndex}" style="display: none;"></span>
+                                </div>
+                            </div>
+                            <div class="inline-answer">
+                                <h4><i class="fas fa-check-circle"></i> 答案</h4>
+                                <div>${exercise.answer}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+
+                        // 确保解析内容是隐藏的
+                        const solutionContent = slideContainer.querySelector('.inline-solution-content');
+                        if (solutionContent) {
+                            solutionContent.classList.remove('show', 'user-clicked');
+                            solutionContent.style.maxHeight = '0';
+                            solutionContent.style.opacity = '0';
+                            solutionContent.style.padding = '0';
+                            solutionContent.style.visibility = 'hidden';
+                        }
+                    }
+
+                    // 显示全屏容器
+                    container.style.display = 'flex';
+
+                    // 锁定背景滚动
+                    document.body.style.overflow = 'hidden';
+
+                    // 更新计数器
+                    document.getElementById('inline-current-slide').textContent = initialIndex + 1;
+                    document.getElementById('inline-total-slides').textContent = exercisesData.length;
+
+                    // 设置导航按钮状态
+                    setupNavigationButtons(exercisesData);
+
+                    // 渲染公式
+                    setTimeout(function () {
+                        if (window.MathJax && window.MathJax.typesetPromise) {
+                            window.MathJax.typesetPromise([container])
+                                .catch(err => console.warn('MathJax渲染错误:', err));
+                        }
+
+                        // 修复解析按钮
+                        fixInlineButtons();
+                    }, 100);
+
+                    console.log('全屏模式已显示');
+                } catch (error) {
+                    console.error('显示全屏模式出错:', error);
+                    alert('全屏模式出错: ' + error.message);
+                }
+            };
+
+            // 辅助函数：获取难度文本
+            function getDifficultyText(difficulty) {
+                switch (difficulty) {
+                    case 'easy': return '简单';
+                    case 'medium': return '中等';
+                    case 'hard': return '困难';
+                    default: return '中等';
+                }
+            }
+
+            // 设置导航按钮
+            function setupNavigationButtons(exercisesData) {
+                const prevBtn = document.getElementById('inline-prev-slide');
+                const nextBtn = document.getElementById('inline-next-slide');
+                const currentIndex = window.currentSlideIndex || 0;
+
+                if (prevBtn) {
+                    prevBtn.disabled = currentIndex === 0;
+                    prevBtn.onclick = function () {
+                        if (currentIndex > 0) {
+                            window.showInlineFullscreen(exercisesData, exercisesData[currentIndex - 1].id);
+                        }
+                    };
+                }
+
+                if (nextBtn) {
+                    nextBtn.disabled = currentIndex >= exercisesData.length - 1;
+                    nextBtn.onclick = function () {
+                        if (currentIndex < exercisesData.length - 1) {
+                            window.showInlineFullscreen(exercisesData, exercisesData[currentIndex + 1].id);
+                        }
+                    };
+                }
+            }
+
+            // 速度切换按钮
+            const speedBtn = document.getElementById('inline-speed-btn');
+            if (speedBtn) {
+                speedBtn.onclick = function () {
+                    if (window.typingSpeed === 30) {
+                        window.typingSpeed = 10; // 快速
+                        this.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 6px;"></i> 快速显示';
+                    } else {
+                        window.typingSpeed = 30; // 标准
+                        this.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 6px;"></i> 标准显示';
+                    }
+                };
+            }
+
+            // 修复解析按钮点击事件
+            function fixSolutionButtons() {
+                console.log('修复解析按钮...');
+                document.querySelectorAll('.solution-toggle').forEach(button => {
+                    // 跳过已经修复过的按钮
+                    if (button.hasAttribute('data-fixed')) return;
+
+                    // 获取题目ID
+                    const exerciseId = button.getAttribute('data-exercise-id');
+                    if (!exerciseId) return;
+
+                    console.log('修复解析按钮:', exerciseId);
+
+                    // 标记已修复
+                    button.setAttribute('data-fixed', 'true');
+
+                    // 确保相关解析内容是隐藏的
+                    const solutionId = 'solution-' + exerciseId;
+                    const solution = document.getElementById(solutionId);
+                    if (solution) {
+                        // 强制隐藏所有解析内容，确保只有点击后才显示
+                        solution.classList.remove('show', 'user-clicked');
+                        solution.style.display = 'none';
+                        solution.style.opacity = '0';
+                        solution.style.maxHeight = '0';
+                        solution.style.overflow = 'hidden';
+                        solution.style.visibility = 'hidden';
+                    }
+
+                    // 清除旧事件
+                    const newBtn = button.cloneNode(true);
+                    if (button.parentNode) {
+                        button.parentNode.replaceChild(newBtn, button);
+                    }
+
+                    // 添加新事件处理
+                    newBtn.onclick = function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        const solutionId = 'solution-' + exerciseId;
+                        const solution = document.getElementById(solutionId);
+
+                        if (!solution) {
+                            console.error('找不到解析容器:', solutionId);
+                            return false;
+                        }
+
+                        // 切换用户点击状态
+                        if (solution.classList.contains('user-clicked')) {
+                            // 隐藏解析
+                            solution.classList.remove('user-clicked', 'show');
+                            solution.style.display = 'none';
+                            solution.style.opacity = '0';
+                            solution.style.maxHeight = '0';
+                            solution.style.overflow = 'hidden';
+                            solution.style.visibility = 'hidden';
+                            this.innerHTML = '<i class="fas fa-lightbulb"></i> 查看解析';
+                        } else {
+                            // 显示解析
+                            solution.classList.add('user-clicked');
+                            solution.style.display = 'block';
+                            solution.style.maxHeight = 'none';
+                            solution.style.opacity = '1';
+                            solution.style.overflow = 'visible';
+                            solution.style.visibility = 'visible';
+                            this.innerHTML = '<i class="fas fa-eye-slash"></i> 隐藏解析';
+
+                            // 确保MathJax重新渲染该容器中的公式
+                            if (window.MathJax) {
+                                try {
+                                    if (MathJax.typesetPromise) {
+                                        MathJax.typesetPromise([solution]).catch(err => {
+                                            console.warn('MathJax渲染警告:', err);
+                                        });
+                                    } else if (MathJax.Hub) {
+                                        MathJax.Hub.Queue(["Typeset", MathJax.Hub, solution]);
+                                    }
+                                } catch (err) {
+                                    console.error('公式渲染出错:', err);
+                                }
+                            }
+                        }
+
+                        return false;
+                    };
+                });
+            }
+
+            // 修复内联全屏解析按钮
+            function fixInlineButtons() {
+                document.querySelectorAll('.inline-toggle-solution-btn').forEach(btn => {
+                    // 跳过已经修复过的按钮
+                    if (btn.hasAttribute('data-fixed')) return;
+
+                    // 标记已修复
+                    btn.setAttribute('data-fixed', 'true');
+                    
+                    // 获取滑动索引
+                    const slideIndex = parseInt(btn.getAttribute('data-slide'));
+                    const solutionContent = document.getElementById(`inline-solution-${slideIndex}`);
+
+                    if (solutionContent) {
+                        // 初始化解析内容样式
+                        resetSolutionDisplay(slideIndex);
+                        
+                        // 添加点击事件监听器到解析内容区域
+                        solutionContent.addEventListener('click', function(e) {
+                            // 阻止事件冒泡，避免触发其他事件
+                            e.preventDefault();
+                            e.stopPropagation();
+                            
+                            // 不触发的情况：如果点击的是按钮或按钮的子元素
+                            if (e.target.tagName === 'BUTTON' || 
+                                e.target.closest('button') || 
+                                e.target.classList.contains('inline-toggle-solution-btn')) {
+                                return;
+                            }
+                            
+                            // 只有当解析内容已显示时才显示下一行
+                            if (this.classList.contains('user-clicked')) {
+                                showNextLine(slideIndex, true);
+                            }
+                        });
+                    }
+
+
+                    // 清除旧事件
+                    const newBtn = btn.cloneNode(true);
+                    if (btn.parentNode) {
+                        btn.parentNode.replaceChild(newBtn, btn);
+                    }
+
+                    // 添加新事件处理
+                    newBtn.onclick = function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        const slideIndex = parseInt(this.getAttribute('data-slide'));
+                        const solutionContent = document.getElementById(`inline-solution-${slideIndex}`);
+
+                        if (!solutionContent) {
+                            console.error('找不到解析容器:', slideIndex);
+                            return;
+                        }
+
+
+                        // 使用user-clicked类切换显示状态
+                        if (solutionContent.classList.contains('user-clicked')) {
+                            // 隐藏解析
+                            resetSolutionDisplay(slideIndex);
+                            this.innerHTML = '<i class="fas fa-lightbulb"></i> 显示解析';
+                        } else {
+                            // 显示解析
+                            solutionContent.classList.add('user-clicked');
+                            solutionContent.style.maxHeight = '2000px';
+                            solutionContent.style.opacity = '1';
+                            solutionContent.style.padding = '20px';
+                            solutionContent.style.visibility = 'visible';
+
+                            // 解析内容已显示，使用按行显示功能
+                            showNextLine(slideIndex, true);
+                        }
+                    };
+                });
+            }
+
+            // 重新绑定所有全屏按钮的点击事件
+            function rebindFullscreenButtons() {
+                console.log('重新绑定全屏按钮...');
+                document.querySelectorAll('.fullscreen-btn').forEach(btn => {
+                    // 移除旧事件
+                    const clone = btn.cloneNode(true);
+                    if (btn.parentNode) {
+                        btn.parentNode.replaceChild(clone, btn);
+                    }
+
+                    // 添加新事件
+                    clone.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        const exerciseId = this.getAttribute('data-exercise-id');
+                        console.log('点击全屏按钮，习题ID:', exerciseId);
+
+                        // 获取习题数据
+                        let exercisesData = [];
+                        if (window.ExerciseManager && Array.isArray(window.ExerciseManager.exercises)) {
+                            exercisesData = window.ExerciseManager.exercises;
+                            console.log('从ExerciseManager获取习题数据');
+                        } else if (window.exerciseData && Array.isArray(window.exerciseData.exercises)) {
+                            exercisesData = window.exerciseData.exercises;
+                            console.log('从exerciseData获取习题数据');
+                        } else {
+                            console.warn('无法找到习题数据');
+                            alert('无法找到习题数据，全屏模式可能无法正常工作');
+                            return;
+                        }
+
+                        // 调用全屏函数
+                        window.showInlineFullscreen(exercisesData, exerciseId);
+                    });
+                });
+            }
+
+            // 在页面加载完成后执行
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function () {
+                    setTimeout(rebindFullscreenButtons, 1000);
+                });
+            } else {
+                setTimeout(rebindFullscreenButtons, 500);
+            }
+
+            // 定期检查并重新绑定全屏按钮
+            setInterval(rebindFullscreenButtons, 3000);
+
+            console.log('全屏功能修复脚本已加载');
+        })();
+    </script>
+
+    <!-- 解析显示修复脚本 -->
+    <script>
+        // 解析显示问题综合修复脚本
+        (function () {
+            console.log('===== 解析显示综合修复脚本加载 =====');
+
+            // 全局变量
+            window.isTyping = false;
+            window.typingTimeout = null;
+            window.typingSpeed = 30; // 默认标准速度
+
+            // 1. 首先添加一个立即生效的强制隐藏样式
+            const forceHideStyle = document.createElement('style');
+            forceHideStyle.textContent = `
+        /* 默认强制隐藏所有解析内容 */
+        .solution-content {
+            display: none !important;
+            opacity: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            visibility: hidden !important;
+            transition: none !important;
+        }
+        
+        /* 只有在用户点击后显示 */
+        .solution-content.user-clicked {
+            display: block !important;
+            opacity: 1 !important;
+            max-height: none !important;
+            overflow: visible !important;
+            visibility: visible !important;
+        }
+        
+        /* 覆盖内联全屏模式样式 */
+        .inline-solution-content {
+            display: none !important;
+            max-height: 0 !important;
+            opacity: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            visibility: hidden !important;
+            transition: none !important; /* Prevents animation issues */
+        }
+
+        /* 只有在用户点击后才显示内联解析 */
+        .inline-solution-content.user-clicked {
+            display: block !important;
+            max-height: 2000px !important; /* Or 'none' */
+            padding: 20px !important;
+            opacity: 1 !important;
+            /* ... other styles to make it visible ... */
+            visibility: visible !important;
+            overflow: visible !important;
+        }
+        
+        /* 增强的打字光标样式 */
+        .inline-typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background-color: #333;
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 0.7s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        /* 段落样式，提高可读性 */
+        .inline-solution-text p,
+        .inline-solution-text br + span {
+            margin-top: 0.8em;
+            display: block;
+        }
+        
+        /* 为段落添加淡入效果 */
+        .inline-solution-text span {
+            display: inline-block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* 确保数学公式正确显示 */
+        .inline-solution-text .MathJax {
+            margin: 0.5em 0;
+        }
+    `;
+            document.head.appendChild(forceHideStyle);
+
+            // 段落显示效果函数 - 全局暴露
+            window.startTypingEffect = function (element, cursor, text, slideIndex) {
+                console.log('开始段落显示效果', slideIndex);
+
+                // 清空元素内容
+                element.innerHTML = '';
+                cursor.style.display = 'inline-block';
+
+                // 标记正在打字
+                window.isTyping = true;
+
+                // 使用正则表达式将文本分割成段落
+                // 按句号、问号或感叹号后跟空格或换行符分割
+                const paragraphs = text.split(/(?<=[.!?])\s+|(?<=\n)\s*(?=\S)/g)
+                    .filter(p => p.trim().length > 0);  // 移除空段落
+
+                let currentParagraph = 0;
+                let currentHTML = '';
+
+                // 显示下一个段落的函数
+                function displayNextParagraph() {
+                    if (currentParagraph < paragraphs.length && window.isTyping) {
+                        // 获取当前段落
+                        let paragraph = paragraphs[currentParagraph];
+
+                        // 检查段落是否包含数学公式
+                        const hasMathFormula = /(\$\$[\s\S]*?\$\$|\$[^\$\n]+\$)/.test(paragraph);
+
+                        // 将段落添加到HTML中，并添加换行
+                        currentHTML += (currentParagraph > 0 ? '<br>' : '') + paragraph;
+                        element.innerHTML = currentHTML;
+
+                        // 增加段落计数器
+                        currentParagraph++;
+
+                        // 如果包含数学公式，则渲染
+                        if (hasMathFormula && window.MathJax && window.MathJax.typesetPromise) {
+                            window.MathJax.typesetPromise([element])
+                                .catch(err => console.warn('MathJax渲染错误:', err));
+                        }
+
+                        // 根据段落长度和打字速度计算延迟
+                        const baseDelay = window.typingSpeed * 10; // 基础延迟(毫秒)
+                        const charCount = paragraph.length;
+                        const delay = baseDelay + Math.min(charCount * (window.typingSpeed / 3), 1000); // 最多1秒
+
+                        // 安排下一个段落的显示
+                        window.typingTimeout = setTimeout(displayNextParagraph, delay);
+                    } else {
+                        // 完成所有段落的显示
+                        window.isTyping = false;
+                        cursor.style.display = 'none';
+
+                        // 最后渲染一次MathJax确保所有内容都正确渲染
+                        if (window.MathJax && window.MathJax.typesetPromise) {
+                            window.MathJax.typesetPromise([element])
+                                .catch(err => console.warn('MathJax渲染错误:', err));
+                        }
+                    }
+                }
+
+                // 开始显示段落
+                displayNextParagraph();
+            };
+
+            // 定义立即执行的函数来隐藏所有解析内容
+            function forceHideAllSolutions() {
+                console.log('强制隐藏所有解析内容...');
+
+                // 移除所有.show类和.user-clicked类
+                document.querySelectorAll('.solution-content').forEach(solution => {
+                    solution.classList.remove('show', 'user-clicked');
+                    solution.style.display = 'none';
+                    solution.style.opacity = '0';
+                    solution.style.maxHeight = '0';
+                    solution.style.overflow = 'hidden';
+                    solution.style.visibility = 'hidden';
+                });
+
+                // 处理内联全屏模式中的解析内容
+                document.querySelectorAll('.inline-solution-content').forEach(solution => {
+                    solution.classList.remove('show', 'user-clicked');
+                    solution.style.maxHeight = '0';
+                    solution.style.opacity = '0';
+                    solution.style.padding = '0';
+                    solution.style.visibility = 'hidden';
+                });
+
+                // 更新所有查看解析按钮文本
+                document.querySelectorAll('.solution-toggle, .inline-toggle-solution-btn').forEach(btn => {
+                    btn.innerHTML = '<i class="fas fa-lightbulb"></i> 查看解析';
+                });
+            }
+
+            // 修复解析按钮点击事件
+            function fixSolutionButtons() {
+                console.log('修复解析按钮...');
+                document.querySelectorAll('.solution-toggle').forEach(button => {
+                    // 跳过已经修复过的按钮
+                    if (button.hasAttribute('data-fixed')) return;
+
+                    // 获取题目ID
+                    const exerciseId = button.getAttribute('data-exercise-id');
+                    if (!exerciseId) return;
+
+                    console.log('修复解析按钮:', exerciseId);
+
+                    // 标记已修复
+                    button.setAttribute('data-fixed', 'true');
+
+                    // 确保相关解析内容是隐藏的
+                    const solutionId = 'solution-' + exerciseId;
+                    const solution = document.getElementById(solutionId);
+                    if (solution) {
+                        // 强制隐藏所有解析内容，确保只有点击后才显示
+                        solution.classList.remove('show', 'user-clicked');
+                        solution.style.display = 'none';
+                        solution.style.opacity = '0';
+                        solution.style.maxHeight = '0';
+                        solution.style.overflow = 'hidden';
+                        solution.style.visibility = 'hidden';
+                    }
+
+                    // 清除旧事件
+                    const newBtn = button.cloneNode(true);
+                    if (button.parentNode) {
+                        button.parentNode.replaceChild(newBtn, button);
+                    }
+
+                    // 添加新事件处理
+                    newBtn.onclick = function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        const solutionId = 'solution-' + exerciseId;
+                        const solution = document.getElementById(solutionId);
+
+                        if (!solution) {
+                            console.error('找不到解析容器:', solutionId);
+                            return false;
+                        }
+
+                        // 切换用户点击状态
+                        if (solution.classList.contains('user-clicked')) {
+                            // 隐藏解析
+                            solution.classList.remove('user-clicked', 'show');
+                            solution.style.display = 'none';
+                            solution.style.opacity = '0';
+                            solution.style.maxHeight = '0';
+                            solution.style.overflow = 'hidden';
+                            solution.style.visibility = 'hidden';
+                            this.innerHTML = '<i class="fas fa-lightbulb"></i> 查看解析';
+                        } else {
+                            // 显示解析
+                            solution.classList.add('user-clicked');
+                            solution.style.display = 'block';
+                            solution.style.maxHeight = 'none';
+                            solution.style.opacity = '1';
+                            solution.style.overflow = 'visible';
+                            solution.style.visibility = 'visible';
+                            this.innerHTML = '<i class="fas fa-eye-slash"></i> 隐藏解析';
+
+                            // 确保MathJax重新渲染该容器中的公式
+                            if (window.MathJax) {
+                                try {
+                                    if (MathJax.typesetPromise) {
+                                        MathJax.typesetPromise([solution]).catch(err => {
+                                            console.warn('MathJax渲染警告:', err);
+                                        });
+                                    } else if (MathJax.Hub) {
+                                        MathJax.Hub.Queue(["Typeset", MathJax.Hub, solution]);
+                                    }
+                                } catch (err) {
+                                    console.error('公式渲染出错:', err);
+                                }
+                            }
+                        }
+
+                        return false;
+                    };
+                });
+            }
+
+            // 修复内联全屏解析按钮
+            function fixInlineButtons() {
+                document.querySelectorAll('.inline-toggle-solution-btn').forEach(btn => {
+                    // 跳过已经修复过的按钮
+                    if (btn.hasAttribute('data-fixed')) return;
+
+                    // 标记已修复
+                    btn.setAttribute('data-fixed', 'true');
+
+                    // 获取滑动索引并确保对应解析内容是隐藏的
+                    const slideIndex = parseInt(btn.getAttribute('data-slide'));
+                    const solutionContent = document.getElementById(`inline-solution-${slideIndex}`);
+
+                    if (solutionContent) {
+                        // 强制隐藏该解析内容
+                        solutionContent.classList.remove('show', 'user-clicked');
+                        solutionContent.style.maxHeight = '0';
+                        solutionContent.style.opacity = '0';
+                        solutionContent.style.padding = '0';
+                        solutionContent.style.visibility = 'hidden';
+
+                        // 添加点击事件处理，点击空白处显示下一行
+                        solutionContent.addEventListener('click', function (e) {
+                            // 如果点击的是解析内容本身而不是按钮
+                            if (e.target === solutionContent || e.target.classList.contains('solution-content')) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                showNextLine(slideIndex, true);
+                            }
+                        });
+                    }
+
+
+                    // 清除旧事件
+                    const newBtn = btn.cloneNode(true);
+                    if (btn.parentNode) {
+                        btn.parentNode.replaceChild(newBtn, btn);
+                    }
+
+                    // 添加新事件处理
+                    newBtn.onclick = function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        const slideIndex = parseInt(this.getAttribute('data-slide'));
+                        const solutionContent = document.getElementById(`inline-solution-${slideIndex}`);
+                        const solutionText = document.getElementById(`inline-solution-text-${slideIndex}`);
+                        const cursor = document.getElementById(`inline-cursor-${slideIndex}`);
+
+                        if (!solutionContent) {
+                            console.error('找不到解析容器:', slideIndex);
+                            return;
+                        }
+
+
+                        // 确保获取到全局习题数据
+                        if (!window.fullscreenExercises || !Array.isArray(window.fullscreenExercises)) {
+                            console.error('习题数据未正确加载');
+                            return;
+                        }
+
+
+                        const exercise = window.fullscreenExercises[slideIndex];
+                        if (!exercise) {
+                            console.error('找不到习题数据，slideIndex:', slideIndex);
+                            return;
+                        }
+
+
+                        // 使用user-clicked类切换显示状态
+                        if (solutionContent.classList.contains('user-clicked')) {
+                            // 隐藏解析
+                            solutionContent.classList.remove('user-clicked', 'show');
+                            solutionContent.style.maxHeight = '0';
+                            solutionContent.style.opacity = '0';
+                            solutionContent.style.padding = '0';
+                            solutionContent.style.visibility = 'hidden';
+                            this.innerHTML = '<i class="fas fa-lightbulb"></i> 显示解析';
+
+                            // 重置解析显示
+                            resetSolutionDisplay(slideIndex);
+                        } else {
+                            // 显示解析
+                            solutionContent.classList.add('user-clicked');
+                            solutionContent.style.maxHeight = '2000px';
+                            solutionContent.style.opacity = '1';
+                            solutionContent.style.padding = '20px';
+                            solutionContent.style.visibility = 'visible';
+                            solutionContent.style.display = 'block';
+
+                            // 获取当前习题数据
+                            const exercise = window.fullscreenExercises[slideIndex];
+                            if (!exercise) {
+                                console.error('找不到习题数据:', slideIndex);
+                                return;
+                            }
+
+                            // 确保解析文本元素存在
+                            if (!solutionText) {
+                                console.error('找不到解析文本元素');
+                                return;
+                            }
+
+
+                            // 确保内容区域可见
+                            solutionContent.style.display = 'block';
+                            solutionContent.style.visibility = 'visible';
+                            solutionContent.style.opacity = '1';
+                            solutionContent.style.maxHeight = 'none';
+                            solutionContent.style.padding = '20px';
+
+                            // 清空现有内容
+                            solutionText.innerHTML = '';
+
+                            // 确保内容区域可见
+                            solutionContent.style.display = 'block';
+                            solutionContent.style.visibility = 'visible';
+                            solutionContent.style.opacity = '1';
+                            solutionContent.style.maxHeight = 'none';
+                            solutionContent.style.padding = '20px';
+
+                            // 显示第一行
+                            window.currentLine = 0;
+                            window.solutionLines = [];
+
+                            // 确保exercise存在且有解析内容
+                            if (exercise && exercise.explanation) {
+                                // 将解析内容按段落分割
+                                window.solutionLines = exercise.explanation.split(/(?<=[.!?])\s+|(?<=\n)\s*(?=\S)/g)
+                                    .filter(p => p && p.trim().length > 0);
+                                window.totalLines = window.solutionLines.length;
+
+                                // 显示第一行
+                                if (window.solutionLines.length > 0) {
+                                    const newParagraph = document.createElement('div');
+                                    newParagraph.className = 'solution-paragraph';
+                                    newParagraph.innerHTML = window.solutionLines[0];
+                                    solutionText.appendChild(newParagraph);
+                                    window.currentLine = 1;
+
+                                    // 渲染数学公式
+                                    if (window.MathJax && window.MathJax.typesetPromise) {
+                                        window.MathJax.typesetPromise([solutionContent])
+                                            .catch(err => console.warn('MathJax渲染错误:', err));
+                                    }
+
+                                    // 更新按钮文本
+                                    if (window.currentLine < window.totalLines) {
+                                        this.innerHTML = '<i class="fas fa-arrow-down"></i> 显示下一行 (' + (window.currentLine) + '/' + window.totalLines + ')';
+                                    } else {
+                                        this.innerHTML = '<i class="fas fa-check-circle"></i> 解析已完全显示';
+                                    }
+                                }
+                            } else {
+                                // 如果没有解析内容，显示提示
+                                solutionText.innerHTML = '<div class="no-solution">暂无解析内容</div>';
+                                this.innerHTML = '<i class="fas fa-info-circle"></i> 无更多内容';
+                            }
+
+                            // 自动滚动到解析区域
+                            solutionText.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    };
+                });
+            }
+
+            // 修复showInlineFullscreen函数
+            window.showInlineFullscreen = function (exercisesData, initialExerciseId) {
+                console.log('显示全屏模式, 习题ID:', initialExerciseId);
+
+                // 确保内联全屏容器存在
+                const container = document.getElementById('inline-fullscreen-container');
+                if (!container) {
+                    console.error('找不到全屏容器！');
+                    alert('全屏模式不可用：容器元素缺失');
+                    return;
+                }
+
+                try {
+                    // 保存习题数据到全局变量
+                    window.fullscreenExercises = exercisesData;
+
+                    // 查找初始习题索引
+                    let initialIndex = 0;
+                    if (initialExerciseId) {
+                        const index = exercisesData.findIndex(ex => ex.id == initialExerciseId);
+                        if (index !== -1) {
+                            initialIndex = index;
+                        }
+                    }
+
+                    // 设置当前习题索引
+                    window.currentSlideIndex = initialIndex;
+
+                    // 准备全屏内容
+                    const exercise = exercisesData[initialIndex];
+                    if (!exercise) {
+                        console.error('找不到习题数据！');
+                        alert('无法显示习题：数据不可用');
+                        return;
+                    }
+
+                    // 获取难度文本
+                    const difficultyText = getDifficultyText(exercise.difficulty);
+
+                    // 判断是否需要显示图片
+                    const needsPlot = ['30', '31', '32', '33', '34', '37', '38', '39', '49', '50'].includes(exercise.id.toString());
+
+                    // 在这里简单地显示全屏容器并填充内容
+                    const slideContainer = document.getElementById('inline-slide-container');
+                    if (slideContainer) {
+                        slideContainer.innerHTML = `
+                <div class="inline-slide" id="inline-slide-${initialIndex}">
+                    <div class="inline-exercise-header">
+                        <div class="inline-exercise-title-wrapper">
+                            <div class="inline-exercise-number">${exercise.id}</div>
+                            <h3 class="inline-exercise-title">${exercise.title}</h3>
+                        </div>
+                        <div class="inline-exercise-meta">
+                            <div class="inline-exercise-tag type"><i class="fas fa-tag"></i> ${exercise.type}</div>
+                            <div class="inline-exercise-tag difficulty ${exercise.difficulty}"><i class="fas fa-signal"></i> ${difficultyText}</div>
+                            <div class="inline-exercise-tag category"><i class="fas fa-folder"></i> ${exercise.category}</div>
+                            ${exercise.method ? `<div class="inline-exercise-tag method"><i class="fas fa-cogs"></i> ${exercise.method}</div>` : ''}
+                        </div>
+                    </div>
+                    <div class="inline-exercise-question">${exercise.question}</div>
+                    <div class="inline-solution-section">
+                        <button class="inline-toggle-solution-btn" data-slide="${initialIndex}">
+                            <i class="fas fa-lightbulb"></i> 显示解析
+                        </button>
+                        <div class="inline-solution-content" id="inline-solution-${initialIndex}">
+                            ${needsPlot ? `
+                            <div class="inline-image-container">
+                                <img src="../images/plots/plot-${exercise.id}.png" alt="函数图像" class="inline-solution-image">
+                            </div>
+                            ` : ''}
+                            <div class="inline-explanation">
+                                <h4><i class="fas fa-chalkboard-teacher"></i> 解析</h4>
+                                <div class="inline-explanation-text">
+                                    <div class="inline-solution-text" id="inline-solution-text-${initialIndex}"></div>
+                                    <span class="inline-typing-cursor" id="inline-cursor-${initialIndex}" style="display: none;"></span>
+                                </div>
+                            </div>
+                            <div class="inline-answer">
+                                <h4><i class="fas fa-check-circle"></i> 答案</h4>
+                                <div>${exercise.answer}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+
+                        // 确保解析内容是隐藏的
+                        const solutionContent = slideContainer.querySelector('.inline-solution-content');
+                        if (solutionContent) {
+                            solutionContent.classList.remove('show', 'user-clicked');
+                            solutionContent.style.maxHeight = '0';
+                            solutionContent.style.opacity = '0';
+                            solutionContent.style.padding = '0';
+                            solutionContent.style.visibility = 'hidden';
+                        }
+                    }
+
+                    // 显示全屏容器
+                    container.style.display = 'flex';
+
+                    // 锁定背景滚动
+                    document.body.style.overflow = 'hidden';
+
+                    // 更新计数器
+                    document.getElementById('inline-current-slide').textContent = initialIndex + 1;
+                    document.getElementById('inline-total-slides').textContent = exercisesData.length;
+
+                    // 设置导航按钮状态
+                    setupNavigationButtons(exercisesData);
+
+                    // 渲染公式
+                    setTimeout(function () {
+                        if (window.MathJax && window.MathJax.typesetPromise) {
+                            window.MathJax.typesetPromise([container])
+                                .catch(err => console.warn('MathJax渲染错误:', err));
+                        }
+
+                        // 修复解析按钮
+                        fixInlineButtons();
+                    }, 100);
+
+                    console.log('全屏模式已显示');
+                } catch (error) {
+                    console.error('显示全屏模式出错:', error);
+                    alert('全屏模式出错: ' + error.message);
+                }
+            };
+
+            // 辅助函数：获取难度文本
+            function getDifficultyText(difficulty) {
+                switch (difficulty) {
+                    case 'easy': return '简单';
+                    case 'medium': return '中等';
+                    case 'hard': return '困难';
+                    default: return '中等';
+                }
+            }
+
+            // 设置导航按钮
+            function setupNavigationButtons(exercisesData) {
+                const prevBtn = document.getElementById('inline-prev-slide');
+                const nextBtn = document.getElementById('inline-next-slide');
+                const currentIndex = window.currentSlideIndex || 0;
+
+                if (prevBtn) {
+                    prevBtn.disabled = currentIndex === 0;
+                    prevBtn.onclick = function () {
+                        if (currentIndex > 0) {
+                            window.showInlineFullscreen(exercisesData, exercisesData[currentIndex - 1].id);
+                        }
+                    };
+                }
+
+                if (nextBtn) {
+                    nextBtn.disabled = currentIndex >= exercisesData.length - 1;
+                    nextBtn.onclick = function () {
+                        if (currentIndex < exercisesData.length - 1) {
+                            window.showInlineFullscreen(exercisesData, exercisesData[currentIndex + 1].id);
+                        }
+                    };
+                }
+            }
+
+            // 速度切换按钮
+            const speedBtn = document.getElementById('inline-speed-btn');
+            if (speedBtn) {
+                speedBtn.onclick = function () {
+                    if (window.typingSpeed === 30) {
+                        window.typingSpeed = 10; // 快速
+                        this.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 6px;"></i> 快速显示';
+                    } else if (window.typingSpeed === 10) {
+                        window.typingSpeed = 0; // 立即显示
+                        this.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 6px;"></i> 立即显示';
+                    } else {
+                        window.typingSpeed = 30; // 标准
+                        this.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 6px;"></i> 标准速度';
+                    }
+
+                    // 如果当前正在显示解析，重新开始打字效果
+                    const currentSlide = document.getElementById(`inline-slide-${window.currentSlideIndex}`);
+                    if (currentSlide) {
+                        // Inside window.showInlineFullscreen, after setting slideContainer.innerHTML
+                        const solutionContent = slideContainer.querySelector('.inline-solution-content');
+                        if (solutionContent) {
+                            solutionContent.classList.remove('show', 'user-clicked'); // Removes any potentially problematic classes
+                            solutionContent.style.maxHeight = '0';
+                            solutionContent.style.opacity = '0';
+                            solutionContent.style.padding = '0';
+                            solutionContent.style.visibility = 'hidden';
+                            solutionContent.style.display = 'none'; // Explicitly hides it
+                        }
+                    }
+                };
+            }
+
+            // 修复全屏模式关闭按钮
+            const closeBtn = document.getElementById('inline-close-btn');
+            if (closeBtn) {
+                closeBtn.onclick = function () {
+                    const container = document.getElementById('inline-fullscreen-container');
+                    if (container) {
+                        container.style.display = 'none';
+                        document.body.style.overflow = '';
+                    }
+                };
+            }
+
+            // 设置MutationObserver监视DOM变化，防止自动显示解析内容
+            function setupDOMObserver() {
+                console.log('设置DOM观察器...');
+
+                // 创建一个观察器实例
+                const observer = new MutationObserver(function (mutations) {
+                    // 检查是否有新的解析内容或按钮添加
+                    let needsUpdate = false;
+
+                    mutations.forEach(function (mutation) {
+                        if (mutation.type === 'childList') {
+                            for (let i = 0; i < mutation.addedNodes.length; i++) {
+                                const node = mutation.addedNodes[i];
+                                if (node.nodeType === 1) { // 元素节点
+                                    if (node.classList &&
+                                        (node.classList.contains('solution-content') ||
+                                            node.classList.contains('inline-solution-content') ||
+                                            node.classList.contains('solution-toggle') ||
+                                            node.classList.contains('inline-toggle-solution-btn'))) {
+                                        needsUpdate = true;
+                                    } else if (node.querySelector) {
+                                        // 检查子元素
+                                        const hasSolutions = node.querySelector('.solution-content, .inline-solution-content, .solution-toggle, .inline-toggle-solution-btn');
+                                        if (hasSolutions) {
+                                            needsUpdate = true;
+                                        }
+                                    }
+                                }
+                            }
+                        } else if (mutation.type === 'attributes') {
+                            // 如果属性变化是class，并且添加了show类
+                            if (mutation.attributeName === 'class') {
+                                const target = mutation.target;
+                                if (target.classList &&
+                                    (target.classList.contains('solution-content') ||
+                                        target.classList.contains('inline-solution-content'))) {
+                                    if (target.classList.contains('show') && !target.classList.contains('user-clicked')) {
+                                        // 移除show类，防止自动显示
+                                        target.classList.remove('show');
+                                        needsUpdate = true;
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    // 如果有需要更新的内容，重新应用隐藏逻辑和按钮重置
+                    if (needsUpdate) {
+                        console.log('检测到DOM变化，重新应用隐藏逻辑');
+                        setTimeout(function () {
+                            // 应用隐藏逻辑，但保留用户已点击显示的解析
+                            document.querySelectorAll('.solution-content:not(.user-clicked), .inline-solution-content:not(.user-clicked)').forEach(solution => {
+                                solution.classList.remove('show');
+                                solution.style.display = 'none';
+                                solution.style.opacity = '0';
+                                solution.style.maxHeight = '0';
+                                solution.style.overflow = 'hidden';
+                                solution.style.visibility = 'hidden';
+                            });
+
+                            // 修复新添加的按钮
+                            fixSolutionButtons();
+                            fixInlineButtons();
+                        }, 10);
+                    }
+                });
+
+                // 配置观察选项
+                const config = {
+                    childList: true,      // 观察子节点的添加或删除
+                    subtree: true,        // 观察所有后代节点
+                    attributes: true,     // 观察属性变化
+                    attributeFilter: ['class', 'style'] // 只关注class和style属性变化
+                };
+
+                // 开始观察整个文档
+                observer.observe(document.body, config);
+            }
+
+            // 初始化函数
+            function init() {
+                console.log('初始化解析显示修复...');
+
+                // 强制隐藏所有解析内容
+                forceHideAllSolutions();
+
+                // 修复普通解析按钮
+                fixSolutionButtons();
+
+                // 修复内联全屏解析按钮
+                fixInlineButtons();
+
+                // 设置DOM观察器
+                setupDOMObserver();
+
+                // 定期检查和修复按钮
+                setInterval(function () {
+                    // 检查是否有未经用户点击而显示的解析
+                    const autoShownSolutions = document.querySelectorAll('.solution-content.show:not(.user-clicked), .inline-solution-content.show:not(.user-clicked)');
+                    if (autoShownSolutions.length > 0) {
+                        console.log(`发现${autoShownSolutions.length}个未经用户点击而显示的解析，强制隐藏`);
+                        autoShownSolutions.forEach(solution => {
+                            solution.classList.remove('show');
+                            solution.style.display = 'none';
+                            solution.style.opacity = '0';
+                            solution.style.maxHeight = '0';
+                            solution.style.overflow = 'hidden';
+                            solution.style.visibility = 'hidden';
+
+                            // 如果是内联解析，清除padding
+                            if (solution.classList.contains('inline-solution-content')) {
+                                solution.style.padding = '0';
+                            }
+                        });
+                    }
+
+                    // 修复按钮
+                    fixSolutionButtons();
+                    fixInlineButtons();
+                }, 500);
+            }
+
+            // 在DOM加载完成后执行初始化
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function () {
+                    setTimeout(init, 100);
+                });
+            } else {
+                // 如果DOM已经加载完成，立即执行
+                setTimeout(init, 50);
+            }
+
+            // 页面完全加载后再次执行
+            window.addEventListener('load', function () {
+                setTimeout(init, 300);
+
+                // 20ms后再次强制隐藏，防止其他脚本加载后显示解析
+                setTimeout(forceHideAllSolutions, 500);
+                setTimeout(forceHideAllSolutions, 1000);
+                setTimeout(forceHideAllSolutions, 2000);
+            });
+        })();
+    </script>
+
+    <!-- 添加紧急内联修复样式 -->
+    <style>
+        /* 强制解决解析内容显示问题 */
+        .solution-content.show {
+            display: block !important;
+            opacity: 1 !important;
+            max-height: none !important;
+            overflow: visible !important;
+            visibility: visible !important;
+        }
+
+        /* 解决解析按钮问题 */
+        .solution-toggle {
+            cursor: pointer !important;
+            position: relative !important;
+            z-index: 20 !important;
+        }
+
+        /* 确保解析容器正确显示 */
+        .solution-section {
+            position: relative !important;
+            z-index: 10 !important;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+
+        /* 确保解析内容在点击后正确显示 */
+        .inline-solution-content.user-clicked,
+        .inline-solution-content.show {
+            display: block !important;
+            opacity: 1 !important;
+            max-height: none !important;
+            overflow: visible !important;
+            visibility: visible !important;
+            padding: 20px !important;
+        }
+
+        /* 确保解析按钮可点击 */
+        .inline-toggle-solution-btn {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+            position: relative !important;
+            z-index: 100 !important;
+        }
+
+        /* 确保解析文本区域正确显示 */
+        #inline-solution-text-0,
+        #inline-solution-text-1,
+        #inline-solution-text-2,
+        #inline-solution-text-3,
+        #inline-solution-text-4,
+        #inline-solution-text-5,
+        #inline-solution-text-6,
+        #inline-solution-text-7,
+        #inline-solution-text-8,
+        #inline-solution-text-9 {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+    </style>
+
+    <!-- 全屏模式下的样式调整 -->
+    <style>
+        /* 全屏模式下的题目和解析样式 */
+        .fullscreen-mode .problem-content,
+        .fullscreen-mode .problem-text,
+        .fullscreen-mode .problem-title,
+        .fullscreen-mode .problem-statement,
+        .fullscreen-mode .inline-solution-content,
+        .fullscreen-mode .solution-paragraph,
+        .fullscreen-mode .solution-text,
+        .fullscreen-mode .solution-section {
+            font-size: 1.4rem !important;
+            line-height: 1.8 !important;
+        }
+
+        /* 数学公式大小调整 */
+        .fullscreen-mode .MathJax_SVG,
+        .fullscreen-mode .MathJax_SVG_Display,
+        .fullscreen-mode .MathJax_SVG * {
+            font-size: 1.6em !important;
+        }
+
+        /* 题目标题 */
+        .fullscreen-mode .problem-title {
+            font-size: 2.8rem !important;
+            margin-bottom: 1.5rem !important;
+        }
+
+        /* 解析内容 */
+        .fullscreen-mode .inline-solution-content {
+            font-size: 2.4rem !important;
+            line-height: 1.8 !important;
+        }
+
+        /* 按钮文字 */
+        .fullscreen-mode .btn,
+        .fullscreen-mode .inline-toggle-solution-btn {
+            font-size: 2.2rem !important;
+            padding: 0.8rem 1.5rem !important;
+        }
+    </style>
+
+    <!-- 修复全屏模式下点击空白区域显示下一行解析内容 -->
+    <script>
+(function() {
+    console.log('开始修复点击解析区域显示下一行功能');
+    
+    // 确保showNextLine函数能正确响应点击
+    window.showNextLine = function(slideIndex, isClick) {
+        console.log('点击调用showNextLine', slideIndex, isClick);
+        
+        // 获取解析文本元素
+        const solutionText = document.getElementById(`inline-solution-text-${slideIndex}`);
+        if (!solutionText) {
+            console.error('找不到解析文本元素', slideIndex);
+            return;
+        }
+        
+        // 确保习题数据已加载
+        if (!window.fullscreenExercises || !Array.isArray(window.fullscreenExercises)) {
+            console.error('习题数据未加载');
+            return;
+        }
+        
+        // 获取当前习题数据
+        const exercise = window.fullscreenExercises[slideIndex];
+        if (!exercise || !exercise.explanation) {
+            console.error('没有找到习题解析内容');
+            return;
+        }
+        
+        // 初始化行数据（如果是第一次调用）
+        if (window.currentLine === 0 || !window.solutionLines || !window.solutionLines.length) {
+            // 分割解析内容为行
+            window.solutionLines = exercise.explanation
+                .split(/(?<=[.!?])\s+|(?<=\n)\s*(?=\S)/g)
+                .filter(p => p && p.trim().length > 0);
+            
+            window.totalLines = window.solutionLines.length;
+            console.log(`解析总行数: ${window.totalLines}`);
+        }
+        
+        // 显示下一行内容
+        if (window.currentLine < window.totalLines) {
+            console.log(`显示第 ${window.currentLine + 1} 行，共 ${window.totalLines} 行`);
+            
+            // 获取当前行内容
+            const lineContent = window.solutionLines[window.currentLine];
+            
+            // 创建新段落
+            const newParagraph = document.createElement('div');
+            newParagraph.className = 'solution-paragraph';
+            newParagraph.innerHTML = lineContent;
+            solutionText.appendChild(newParagraph);
+            
+            // 更新行计数
+            window.currentLine++;
+            
+            // 更新按钮文本
+            updateToggleButton(slideIndex);
+            
+            // 渲染数学公式
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([solutionText])
+                    .catch(err => console.warn('MathJax渲染错误:', err));
+            }
+            
+            // 点击时自动滚动到新内容
+            if (isClick) {
+                setTimeout(() => {
+                    solutionText.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }, 100);
+            }
+        }
+    };
+    
+    // 更新按钮状态
+    function updateToggleButton(slideIndex) {
+        const toggleButton = document.querySelector(`.inline-toggle-solution-btn[data-slide="${slideIndex}"]`);
+        if (toggleButton) {
+            if (window.currentLine < window.totalLines) {
+                toggleButton.innerHTML = `<i class="fas fa-arrow-down"></i> 显示下一行 (${window.currentLine}/${window.totalLines})`;
+            } else {
+                toggleButton.innerHTML = '<i class="fas fa-check-circle"></i> 解析已完全显示';
+            }
+        }
+    }
+    
+    // 修复解析内容点击事件
+    function fixSolutionClickEvent() {
+        // 查找所有已显示的解析内容
+        document.querySelectorAll('.inline-solution-content.user-clicked').forEach(content => {
+            // 如果已经处理过，则跳过
+            if (content.hasAttribute('data-click-fixed')) return;
+            
+            // 标记为已处理
+            content.setAttribute('data-click-fixed', 'true');
+            
+            // 获取幻灯片索引
+            const slideIndex = parseInt(
+                content.id.replace('inline-solution-', '') || 
+                content.previousElementSibling?.getAttribute('data-slide') || 
+                window.currentSlideIndex || 0
+            );
+            
+            // 添加新的点击事件监听器
+            content.addEventListener('click', function(e) {
+                // 确保不是点击按钮或其他交互元素
+                if (e.target.tagName === 'BUTTON' || 
+                    e.target.closest('button') || 
+                    e.target.closest('a') ||
+                    e.target.classList.contains('inline-toggle-solution-btn')) {
+                    return;
+                }
+                
+                console.log('点击解析内容区域', slideIndex);
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // 调用显示下一行函数
+                window.showNextLine(slideIndex, true);
+            });
+            
+            // 添加视觉提示样式
+            content.style.cursor = 'pointer';
+        });
+    }
+    
+    // 定期检查并修复解析内容点击事件
+    setInterval(fixSolutionClickEvent, 500);
+    
+    // 覆盖toggleSolution函数，确保正确设置类名和绑定事件
+    const originalFixInlineButtons = window.fixInlineButtons;
+    window.fixInlineButtons = function() {
+        // 调用原始函数
+        if (typeof originalFixInlineButtons === 'function') {
+            originalFixInlineButtons();
+        }
+        
+        // 增强点击事件绑定
+        document.querySelectorAll('.inline-toggle-solution-btn').forEach(btn => {
+            // 如果已经处理过，则跳过
+            if (btn.hasAttribute('data-click-handler')) return;
+            
+            // 标记为已处理
+            btn.setAttribute('data-click-handler', 'true');
+            
+            // 清除旧事件
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const slideIndex = parseInt(this.getAttribute('data-slide'));
+                const solutionContent = document.getElementById(`inline-solution-${slideIndex}`);
+                
+                if (!solutionContent) {
+                    console.error('找不到解析容器:', slideIndex);
+                    return;
+                }
+                
+                if (solutionContent.classList.contains('user-clicked')) {
+                    // 隐藏解析
+                    solutionContent.classList.remove('user-clicked', 'show');
+                    solutionContent.style.maxHeight = '0';
+                    solutionContent.style.opacity = '0';
+                    solutionContent.style.padding = '0';
+                    solutionContent.style.visibility = 'hidden';
+                    this.innerHTML = '<i class="fas fa-lightbulb"></i> 显示解析';
+                    
+                    // 重置行计数
+                    window.currentLine = 0;
+                    window.totalLines = 0;
+                    window.solutionLines = [];
+                    
+                    // 清空内容
+                    const solutionText = document.getElementById(`inline-solution-text-${slideIndex}`);
+                    if (solutionText) {
+                        solutionText.innerHTML = '';
+                    }
+                } else {
+                    // 显示解析
+                    solutionContent.classList.add('user-clicked', 'show');
+                    solutionContent.style.maxHeight = '2000px';
+                    solutionContent.style.opacity = '1';
+                    solutionContent.style.padding = '20px';
+                    solutionContent.style.visibility = 'visible';
+                    solutionContent.style.display = 'block';
+                    
+                    // 重置行计数
+                    window.currentLine = 0;
+                    window.solutionLines = [];
+                    
+                    // 显示第一行
+                    setTimeout(() => {
+                        window.showNextLine(slideIndex, false);
+                        
+                        // 立即绑定点击事件，无需等待下一次循环
+                        fixSolutionClickEvent();
+                    }, 50);
+                }
+            });
+        });
+    };
+    
+    // 添加明显的视觉反馈样式
+    const style = document.createElement('style');
+    style.textContent = `
+        .inline-solution-content.user-clicked {
+            cursor: pointer;
+            position: relative;
+            z-index: 100;
+        }
+        
+        .inline-solution-content.user-clicked:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        .inline-solution-content.user-clicked:active {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .solution-paragraph {
+            margin-bottom: 0.8em;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // 初始运行一次修复
+    setTimeout(() => {
+        fixSolutionClickEvent();
+        console.log('点击解析区域显示下一行功能修复完成');
+    }, 100);
+})();
+</script>
 </html>
