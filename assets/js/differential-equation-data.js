@@ -1,5 +1,5 @@
 // 全局变量，包含知识点和习题数据
-const exerciseData = {
+window.exerciseData = {
   // 知识点
   knowledgePoints: [
     {
@@ -156,7 +156,6 @@ const exerciseData = {
                     <p style="margin: 5px 0 0 15px; color: #555; font-size: 0.9rem;">$r_2 = \\frac{-p - \\sqrt{p^2 - 4q}}{2}$</p>
                   </div>
                 </div>
-
                 <!-- 右侧内容 -->
                 <div style="flex: 1; min-width: 290px; display: flex; flex-direction: column; justify-content: space-between;">
                   <div style="border-left: 4px solid #f28e2c; padding-left: 10px; margin-bottom: 12px; background: white; padding: 10px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s;">
@@ -171,8 +170,9 @@ const exerciseData = {
                       <strong>$p^2 - 4q < 0$</strong>：一对共轭复根
                     </div>
                     <p style="margin: 8px 0 5px 15px;">$y = e^{\\alpha x}(C_1\\cos \\beta x + C_2\\sin \\beta x)$</p>
+                    <p style="margin: 5px 0 0 15px; color: #555; font-size: 0.9rem;">其中，$r = \\alpha \\pm \\beta i$ 为特征方程的一对共轭复根</p>
                     <p style="margin: 5px 0 5px 15px; color: #555; font-size: 0.9rem;">$\\alpha = -\\frac{p}{2}$</p>
-                    <p style="margin: 5px 0 0 15px; color: #555; font-size: 0.9rem;">$\\beta = \\frac{\\sqrt{4q-p^2}}{2}$</p>
+                    <p style="margin: 5px 0 5px 15px; color: #555; font-size: 0.9rem;">$\\beta = \\frac{\\sqrt{4q-p^2}}{2}$</p>
                   </div>
                 </div>
               </div>
@@ -192,26 +192,24 @@ const exerciseData = {
   ],
 
   // 习题
-
   exercises: [
-
     {
       id: 1,
       type: "计算题",
       title: "可分离变量微分方程",
       question: "1.求解微分方程 $\\frac{dy}{dx} = xy$",
       explanation: `$$解：$$
-      $$将方程变形为标准形式：$$
-      $$\\frac{dy}{dx} = xy$$
-      $$\\frac{dy}{y} = x dx$$
-      $$两边积分：$$
-      $$\\int \\frac{dy}{y} = \\int x dx$$
-      $$\\ln|y| = \\frac{x^2}{2} + C_1$$
-      $$两边取指数：$$
-      $$|y| = e^{\\frac{x^2}{2} + C_1} = e^{C_1} \\cdot e^{\\frac{x^2}{2}} = C_2 \\cdot e^{\\frac{x^2}{2}}$$
-      $$去掉绝对值符号：$$
-      $$y = Ce^{\\frac{x^2}{2}}$$
-      $$其中C为任意常数。这是该微分方程的通解。$$`,
+$$将方程变形为标准形式：$$
+$$\\frac{dy}{dx} = xy$$
+$$\\frac{dy}{y} = x dx$$
+$$两边积分：$$
+$$\\int \\frac{dy}{y} = \\int x dx$$
+$$\\ln|y| = \\frac{x^2}{2} + C_1$$
+$$两边取指数：$$
+$$|y| = e^{\\frac{x^2}{2} + C_1} = e^{C_1} \\cdot e^{\\frac{x^2}{2}} = C_2 \\cdot e^{\\frac{x^2}{2}}$$
+$$去掉绝对值符号：$$
+$$y = Ce^{\\frac{x^2}{2}}$$
+$$其中C为任意常数。这是该微分方程的通解。$$`,
       answer: "$y = Ce^{\\frac{x^2}{2}}$，其中C为任意常数",
       difficulty: "medium",
       category: "可分离变量的微分方程",
@@ -223,9 +221,9 @@ const exerciseData = {
       title: "微分方程的阶",
       question: "2.微分方程 $\\frac{d^2y}{dx^2} + 3\\frac{dy}{dx} - 2y = 0$ 的阶是_______。",
       explanation: `$$解：$$
-      $$微分方程的阶是指它所含未知函数的最高阶导数的阶数。$$
-      $$在给定的微分方程 \\frac{d^2y}{dx^2} + 3\\frac{dy}{dx} - 2y = 0 中，最高阶导数是 \\frac{d^2y}{dx^2}，即二阶导数。$$
-      $$因此，该微分方程是二阶微分方程。$$`,
+$$微分方程的阶是指它所含未知函数的最高阶导数的阶数。$$
+$$在给定的微分方程 \\frac{d^2y}{dx^2} + 3\\frac{dy}{dx} - 2y = 0 中，最高阶导数是 \\frac{d^2y}{dx^2}，即二阶导数。$$
+$$因此，该微分方程是二阶微分方程。$$`,
       answer: "2",
       difficulty: "easy",
       category: "微分方程基本概念",
@@ -237,14 +235,14 @@ const exerciseData = {
       title: "一阶线性微分方程",
       question: "3.求解微分方程 $\\frac{dy}{dx} + y = e^x$",
       explanation: `$$解：$$
-      $$这是一阶线性微分方程，标准形式为：y' + y = e^x，即 y' + p(x)y = Q(x)，其中 p(x) = 1，Q(x) = e^x$$
-      $$使用公式法求解线性微分方程：$$
-      $$y = e^{-\\int p(x) \\, dx} \\left( \\int Q(x) e^{\\int p(x) \\, dx} \\, dx + C \\right)$$
-      $$y = e^{-\\int 1 \\, dx} \\left( \\int e^x e^{\\int 1 \\, dx} \\, dx + C \\right)$$
-      $$y = e^{-x} \\left( \\int e^{2x} \\, dx + C \\right)$$
-      $$计算积分：\\int e^{2x} \\, dx = \\frac{1}{2} \\cdot \\int e^{2x} \\, d2x = \\frac{1}{2} \\cdot e^{2x} + C_1$$
-      $$代入原式：y = e^{-x} \\left( \\frac{1}{2}e^{2x} + C \\right) = \\frac{1}{2}e^x + Ce^{-x}$$
-      $$这是该微分方程的通解，其中C为任意常数。$$`,
+$$这是一阶线性微分方程，标准形式为：y' + y = e^x，即 y' + p(x)y = Q(x)，其中 p(x) = 1，Q(x) = e^x$$
+$$使用公式法求解线性微分方程：$$
+$$y = e^{-\\int p(x) \\, dx} \\left( \\int Q(x) e^{\\int p(x) \\, dx} \\, dx + C \\right)$$
+$$y = e^{-\\int 1 \\, dx} \\left( \\int e^x e^{\\int 1 \\, dx} \\, dx + C \\right)$$
+$$y = e^{-x} \\left( \\int e^{2x} \\, dx + C \\right)$$
+$$计算积分：\\int e^{2x} \\, dx = \\frac{1}{2} \\cdot \\int e^{2x} \\, d2x = \\frac{1}{2} \\cdot e^{2x} + C_1$$
+$$代入原式：y = e^{-x} \\left( \\frac{1}{2}e^{2x} + C \\right) = \\frac{1}{2}e^x + Ce^{-x}$$
+$$这是该微分方程的通解，其中C为任意常数。$$`,
       answer: "$y = \\frac{1}{2}e^x + Ce^{-x}$，其中C为任意常数",
       difficulty: "hard",
       category: "一阶线性微分方程",
@@ -256,11 +254,11 @@ const exerciseData = {
       title: "二阶常系数线性微分方程",
       question: "4.求解微分方程 $y'' - 5y' + 6y = 0$",
       explanation: `$$解：$$
-      $$1. 写出特征方程：r^2 - 5r + 6 = 0$$
-      $$2. 求特征根：(r-2)(r-3) = 0 ,r_1 = 2, r_2 = 3$$
-      $$3. 由于有两个不同的实根，通解形式为：y = C_1e^{r_1x} + C_2e^{r_2x}$$
-      $$4. 代入特征根：y = C_1e^{2x} + C_2e^{3x}$$
-      $$这是该微分方程的通解，其中C_1和C_2为任意常数。$$`,
+$$1. 写出特征方程：r^2 - 5r + 6 = 0$$
+$$2. 求特征根：(r-2)(r-3) = 0 ,r_1 = 2, r_2 = 3$$
+$$3. 由于有两个不同的实根，通解形式为：y = C_1e^{r_1x} + C_2e^{r_2x}$$
+$$4. 代入特征根：y = C_1e^{2x} + C_2e^{3x}$$
+$$这是该微分方程的通解，其中C_1和C_2为任意常数。$$`,
       answer: "$y = C_1e^{2x} + C_2e^{3x}$，其中$C_1$和$C_2$为任意常数",
       difficulty: "medium",
       category: "二阶常系数线性微分方程",
@@ -272,11 +270,11 @@ const exerciseData = {
       title: "二阶常系数线性微分方程",
       question: "5.求解微分方程 $y'' + 4y' + 4y = 0$",
       explanation: `$$解：$$
-      $$1. 特征方程：r^2 + 4r + 4 = 0$$
-      $$2. 特征根：(r+2)^2 = 0，r = -2（二重根）$$
-      $$3. 二重根通解形式：y = (C_1 + C_2x)e^{rx}$$
-      $$4. 代入特征根：y = (C_1 + C_2x)e^{-2x}$$
-      $$这是该微分方程的通解，其中C_1和C_2为任意常数。$$`,
+$$1. 特征方程：r^2 + 4r + 4 = 0$$
+$$2. 特征根：(r+2)^2 = 0，r = -2（二重根）$$
+$$3. 二重根通解形式：y = (C_1 + C_2x)e^{rx}$$
+$$4. 代入特征根：y = (C_1 + C_2x)e^{-2x}$$
+$$这是该微分方程的通解，其中C_1和C_2为任意常数。$$`,
       answer: "$y = (C_1 + C_2x)e^{-2x}$，其中$C_1$和$C_2$为任意常数",
       difficulty: "medium",
       category: "二阶常系数线性微分方程",
@@ -288,11 +286,11 @@ const exerciseData = {
       title: "二阶常系数线性微分方程",
       question: "6.求解微分方程 $y'' + 2y' + 5y = 0$",
       explanation: `$$解：$$
-      $$1. 写出特征方程：r^2 + 2r + 5 = 0$$
-      $$2. 求特征根：r = \\frac{-2 \\pm \\sqrt{4-20}}{2} = -1 \\pm 2i$$
-      $$3. 由于有一对共轭复根，通解形式为：y = e^{\\alpha x}(C_1\\cos \\beta x + C_2\\sin \\beta x)，其中 \\alpha 是实部，\\beta 是虚部的绝对值$$
-      $$4. 代入 \\alpha = -1, \\beta = 2：y = e^{-x}(C_1\\cos 2x + C_2\\sin 2x)$$
-      $$这是该微分方程的通解，其中C_1和C_2为任意常数。$$`,
+$$1. 写出特征方程：r^2 + 2r + 5 = 0$$
+$$2. 求特征根：r = \\frac{-2 \\pm \\sqrt{4-20}}{2} = -1 \\pm 2i$$
+$$3. 由于有一对共轭复根，通解形式为：y = e^{\\alpha x}(C_1\\cos \\beta x + C_2\\sin \\beta x)，其中 \\alpha 是实部，\\beta 是虚部的绝对值$$
+$$4. 代入 \\alpha = -1, \\beta = 2：y = e^{-x}(C_1\\cos 2x + C_2\\sin 2x)$$
+$$这是该微分方程的通解，其中C_1和C_2为任意常数。$$`,
       answer: "$y = e^{-x}(C_1\\cos 2x + C_2\\sin 2x)$，其中$C_1$和$C_2$为任意常数",
       difficulty: "hard",
       category: "二阶常系数线性微分方程",
@@ -304,9 +302,9 @@ const exerciseData = {
       title: "可分离变量微分方程",
       question: "7.求解微分方程 $\\frac{dy}{dx} = \\frac{x}{y}$",
       explanation: `$$解：1. 将方程变形为标准形式：y dy = x dx$$
-      $$2. 两边积分：\\int y dy = \\int x dx, \\frac{y^2}{2} = \\frac{x^2}{2} + C$$
-      $$3. 解出y：y^2 = x^2 + 2C, y = \\pm\\sqrt{x^2 + 2C}$$
-      $$这是该微分方程的通解，其中C为任意常数。$$`,
+$$2. 两边积分：\\int y dy = \\int x dx, \\frac{y^2}{2} = \\frac{x^2}{2} + C$$
+$$3. 解出y：y^2 = x^2 + 2C, y = \\pm\\sqrt{x^2 + 2C}$$
+$$这是该微分方程的通解，其中C为任意常数。$$`,
       answer: "$y = \\pm\\sqrt{x^2 + 2C}$，其中C为任意常数",
       difficulty: "medium",
       category: "可分离变量的微分方程",
@@ -318,9 +316,9 @@ const exerciseData = {
       title: "可分离变量微分方程",
       question: "8.求解微分方程 $\\frac{dy}{dx} = y\\sin x$",
       explanation: `$$解：1. 将方程变形为标准形式：\\frac{dy}{y} = \\sin x dx$$
-      $$2. 两边积分：\\int \\frac{dy}{y} = \\int \\sin x dx, \\ln|y| = -\\cos x + C$$
-      $$3. 解出y：y = \\pm e^{-\\cos x + C} = Ce^{-\\cos x}$$
-      $$这是该微分方程的通解，其中C为任意非零常数。$$`,
+$$2. 两边积分：\\int \\frac{dy}{y} = \\int \\sin x dx, \\ln|y| = -\\cos x + C$$
+$$3. 解出y：y = \\pm e^{-\\cos x + C} = Ce^{-\\cos x}$$
+$$这是该微分方程的通解，其中C为任意非零常数。$$`,
       answer: "$y = Ce^{-\\cos x}$，其中C为任意非零常数",
       difficulty: "medium",
       category: "可分离变量的微分方程",
@@ -332,8 +330,8 @@ const exerciseData = {
       title: "微分方程的基本概念",
       question: "9.判断题：一阶微分方程的阶是指最高阶导数的阶数。",
       explanation: `$$解：这道题的说法是正确的。微分方程的阶是指方程中出现的最高阶导数的阶数。$$
-      $$一阶微分方程中最高阶导数是一阶导数，即\\frac{dy}{dx}或y'，因此一阶微分方程的阶为1。$$
-      $$例如：\\frac{dy}{dx} = 2x + y就是一个一阶微分方程。$$`,
+$$一阶微分方程中最高阶导数是一阶导数，即\\frac{dy}{dx}或y'，因此一阶微分方程的阶为1。$$
+$$例如：\\frac{dy}{dx} = 2x + y就是一个一阶微分方程。$$`,
       answer: "正确",
       difficulty: "easy",
       category: "微分方程基本概念",
@@ -345,8 +343,8 @@ const exerciseData = {
       title: "微分方程的类型",
       question: "10.若微分方程可以写成$P(x)dx + Q(y)dy = 0$的形式，则此方程称为_______的微分方程。",
       explanation: `$$解：若微分方程可以写成P(x)dx + Q(y)dy = 0的形式，其中P(x)只是x的函数，Q(y)只是y的函数，则此方程称为可分离变量的微分方程。$$
-      $$这类方程可以通过分离变量的方法求解，即将方程整理为\\frac{Q(y)dy}{P(x)dx} = -1，然后对两边积分。$$
-      $$例如：\\frac{dy}{dx} = xy可以写成xdx - \\frac{1}{y}dy = 0，就是一个可分离变量的微分方程。$$`,
+$$这类方程可以通过分离变量的方法求解，即将方程整理为\\frac{Q(y)dy}{P(x)dx} = -1，然后对两边积分。$$
+$$例如：\\frac{dy}{dx} = xy可以写成xdx - \\frac{1}{y}dy = 0，就是一个可分离变量的微分方程。$$`,
       answer: "可分离变量",
       difficulty: "easy",
       category: "微分方程基本概念",
@@ -358,9 +356,9 @@ const exerciseData = {
       title: "微分方程的通解与特解",
       question: "11.判断题：微分方程的通解包含任意常数，特解是通解中常数取特定值得到的解。",
       explanation: `$$解：$$
-      $$这个说法是正确的。$$
-      $$1. 通解：微分方程的通解是包含任意常数的解，常数的个数等于微分方程的阶数。$$
-      $$2. 特解：特解是通解中通过特定值或满足初值条件得到的解。$$`,
+$$这个说法是正确的。$$
+$$1. 通解：微分方程的通解是包含任意常数的解，常数的个数等于微分方程的阶数。$$
+$$2. 特解：特解是通解中通过特定值或满足初值条件得到的解。$$`,
       answer: "正确",
       difficulty: "medium",
       category: "微分方程基本概念",
@@ -372,8 +370,8 @@ const exerciseData = {
       title: "微分方程的初值条件",
       question: "12.判断题：初值条件可以确定微分方程通解中的任意常数，从而得到唯一的特解。",
       explanation: `$$解：$$
-      $$这个说法是正确的。微分方程的通解通常包含任意常数，而初值条件可以确定这些常数的值，从而得到唯一的特解。$$
-      $$例如：对于一阶微分方程\\frac{dy}{dx} = f(x,y)，给定初值条件y(x_0) = y_0，就可以确定通解中的任意常数，得到唯一的特解。$$`,
+$$这个说法是正确的。微分方程的通解通常包含任意常数，而初值条件可以确定这些常数的值，从而得到唯一的特解。$$
+$$例如：对于一阶微分方程\\frac{dy}{dx} = f(x,y)，给定初值条件y(x_0) = y_0，就可以确定通解中的任意常数，得到唯一的特解。$$`,
       answer: "正确",
       difficulty: "medium",
       category: "微分方程基本概念",
@@ -385,46 +383,42 @@ const exerciseData = {
       title: "可分离变量微分方程",
       question: "13.求解微分方程 $\\frac{dy}{dx} = \\frac{y^2}{1+x^2}$",
       explanation: `$$解：$$
-      $$1. 将方程变形为标准形式：\\frac{dy}{y^2} = \\frac{dx}{1+x^2}$$
-      $$2. 两边积分：$$
-      $$\\int \\frac{dy}{y^2} = \\int \\frac{dx}{1+x^2}$$
-      $$-\\frac{1}{y} = \\arctan x + C$$
-      $$3. 解出y：$$
-      $$\\frac{1}{y} = -\\arctan x - C$$
-      $$\\frac{1}{y} = -\\arctan x + C'$$
-      $$y = \\frac{1}{-\\arctan x + C'} = \\frac{1}{C - \\arctan x}$$
-      $$其中C为任意常数。这是该微分方程的通解。$$`,
+$$1. 将方程变形为标准形式：\\frac{dy}{y^2} = \\frac{dx}{1+x^2}$$
+$$2. 两边积分：$$
+$$\\int \\frac{dy}{y^2} = \\int \\frac{dx}{1+x^2}$$
+$$-\\frac{1}{y} = \\arctan x + C$$
+$$3. 解出y：$$
+$$\\frac{1}{y} = -\\arctan x - C$$
+$$\\frac{1}{y} = -\\arctan x + C'$$
+$$y = \\frac{1}{-\\arctan x + C'} = \\frac{1}{C - \\arctan x}$$
+$$其中C为任意常数。这是该微分方程的通解。$$`,
       answer: "$y = \\frac{1}{C - \\arctan x}$，其中C为任意常数",
       difficulty: "medium",
       category: "可分离变量的微分方程",
       method: "分离变量法"
     },
-
     {
       id: 14,
       type: "计算题",
       title: "一阶线性非齐次微分方程求解",
       question: "14.求解一阶线性非齐次微分方程 $\\frac{dy}{dx} + 2y = e^x$。",
       explanation: `$$解：$$
-      $$1. 这是一阶线性非齐次微分方程，标准形式为：y' + P(x)y = Q(x)$$
-      $$其中 P(x) = 2，Q(x) = e^x$$
-      $$2. 使用公式法求解：$$
-      $$y = e^{-\\int P(x)dx} \\left(\\int Q(x)e^{\\int P(x)dx}dx + C\\right)=e^{-\\int 2dx} \\left(\\int e^x e^{2x}dx + C\\right)$$
-      $$3. 计算积分：$$
-      $$\\int P(x)dx = \\int 2dx = 2x$$
-      $$e^{\\int P(x)dx} = e^{2x}$$
-      $$4. 代入公式：$$
-         $$y = e^{-2x} \\left(\\int e^x \\cdot e^{2x}dx + C\\right)$$
-         $$= e^{-2x} \\left(\\int e^{3x}dx + C\\right)$$
-         
-         $$计算\\int e^{3x}dx：$$
-         $$\\int e^{3x}dx =\\frac{1}{3}\\int e^{3x}d3x= \\frac{1}{3}e^{3x} + C_1$$
-         
-         $$继续代入：$$
-         $$= e^{-2x} \\left(\\frac{1}{3}e^{3x} + C\\right)$$
-         $$= \\frac{1}{3}e^x + Ce^{-2x}$$
-
-      $$这是该微分方程的通解，其中C为任意常数。$$`,
+$$1. 这是一阶线性非齐次微分方程，标准形式为：y' + P(x)y = Q(x)$$
+$$其中 P(x) = 2，Q(x) = e^x$$
+$$2. 使用公式法求解：$$
+$$y = e^{-\\int P(x)dx} \\left(\\int Q(x)e^{\\int P(x)dx}dx + C\\right)=e^{-\\int 2dx} \\left(\\int e^x e^{2x}dx + C\\right)$$
+$$3. 计算积分：$$
+$$\\int P(x)dx = \\int 2dx = 2x$$
+$$e^{\\int P(x)dx} = e^{2x}$$
+$$4. 代入公式：$$
+$$y = e^{-2x} \\left(\\int e^x \\cdot e^{2x}dx + C\\right)$$
+$$= e^{-2x} \\left(\\int e^{3x}dx + C\\right)$$
+$$计算\\int e^{3x}dx：$$
+$$\\int e^{3x}dx =\\frac{1}{3}\\int e^{3x}d3x= \\frac{1}{3}e^{3x} + C_1$$
+$$继续代入：$$
+$$= e^{-2x} \\left(\\frac{1}{3}e^{3x} + C\\right)$$
+$$= \\frac{1}{3}e^x + Ce^{-2x}$$
+$$这是该微分方程的通解，其中C为任意常数。$$`,
       answer: "$y = \\frac{1}{3}e^x + Ce^{-2x}$，其中C为任意常数",
       difficulty: "medium",
       category: "一阶线性微分方程",
@@ -436,19 +430,19 @@ const exerciseData = {
       title: "一阶线性微分方程",
       question: "15.求解微分方程 $\\frac{dy}{dx} + y = 6x$",
       explanation: `$$解：$$
-      $$1. 这是一个一阶线性微分方程，标准形式为：y' + P(x)y = Q(x)$$
-      $$ y' + y = 6x，其中 P(x) = 1，Q(x) = 6x$$
-      $$2. 使用公式法求解线性微分方程：y = e^{-\\int P(x)dx} \\left(\\int Q(x)e^{\\int P(x)dx}dx + C\\right)=e^{-\\int 1 dx} \\left( \\int 6xe^{\\int 1 dx} dx + C \\right)$$
-      $$3. 计算积分：$$
-      $$e^{-\\int 1 dx} = e^{-x}$$
-      $$\\int 6xe^{\\int 1 dx} dx = 6 \\int xe^{x} dx$$
-      $$= 6 \\int x de^{x}= 6 \\left(xe^{x} - \\int e^{x} dx\\right)$$
-      $$= 6 \\left(xe^{x} - e^{x}\\right) + C= 6 \\left(x - 1\\right)e^{x} + C$$
-      $$4. 得到通解：$$
-      $$y = e^{-x} \\left(6(x - 1)e^{x} + C\\right)$$
-      $$= 6(x - 1) + Ce^{-x}$$
-      $$= 6x - 6 + Ce^{-x}$$
-      $$这是该微分方程的通解，其中C为任意常数。$$`,
+$$1. 这是一个一阶线性微分方程，标准形式为：y' + P(x)y = Q(x)$$
+$$ y' + y = 6x，其中 P(x) = 1，Q(x) = 6x$$
+$$2. 使用公式法求解线性微分方程：y = e^{-\\int P(x)dx} \\left(\\int Q(x)e^{\\int P(x)dx}dx + C\\right)=e^{-\\int 1 dx} \\left( \\int 6xe^{\\int 1 dx} dx + C \\right)$$
+$$3. 计算积分：$$
+$$e^{-\\int 1 dx} = e^{-x}$$
+$$\\int 6xe^{\\int 1 dx} dx = 6 \\int xe^{x} dx$$
+$$= 6 \\int x de^{x}= 6 \\left(xe^{x} - \\int e^{x} dx\\right)$$
+$$= 6 \\left(xe^{x} - e^{x}\\right) + C= 6 \\left(x - 1\\right)e^{x} + C$$
+$$4. 得到通解：$$
+$$y = e^{-x} \\left(6(x - 1)e^{x} + C\\right)$$
+$$= 6(x - 1) + Ce^{-x}$$
+$$= 6x - 6 + Ce^{-x}$$
+$$这是该微分方程的通解，其中C为任意常数。$$`,
       answer: "$y = 6x - 6 + Ce^{-x}$，其中C为任意常数",
       difficulty: "medium",
       category: "一阶线性微分方程",
@@ -460,13 +454,13 @@ const exerciseData = {
       title: "二阶常系数线性微分方程",
       question: "16.求解微分方程 $y'' - y' - 6y = 0$",
       explanation: `$$解：$$
-      $$1. 写出特征方程：r^2 - r - 6 = 0$$
-      $$2. 求特征根：$$
-      $$(r-3)(r+2) = 0$$
-      $$r_1 = 3, r_2 = -2$$
-      $$3. 由于有两个不同的实根，通解形式为：y = C_1e^{r_1x} + C_2e^{r_2x}$$
-      $$4. 代入特征根：y = C_1e^{3x} + C_2e^{-2x}$$
-      $$这是该微分方程的通解，其中C_1和C_2为任意常数。$$`,
+$$1. 写出特征方程：r^2 - r - 6 = 0$$
+$$2. 求特征根：$$
+$$(r-3)(r+2) = 0$$
+$$r_1 = 3, r_2 = -2$$
+$$3. 由于有两个不同的实根，通解形式为：y = C_1e^{r_1x} + C_2e^{r_2x}$$
+$$4. 代入特征根：y = C_1e^{3x} + C_2e^{-2x}$$
+$$这是该微分方程的通解，其中C_1和C_2为任意常数。$$`,
       answer: "$y = C_1e^{3x} + C_2e^{-2x}$，其中$C_1$和$C_2$为任意常数",
       difficulty: "medium",
       category: "二阶常系数线性微分方程",
@@ -478,9 +472,9 @@ const exerciseData = {
       title: "一阶线性微分方程的形式",
       question: "17.判断题：方程$y' + P(x)y = Q(x)$是一阶线性微分方程的标准形式。",
       explanation: `$$解：这道题的说法是正确的。一阶线性微分方程的标准形式是y' + P(x)y = Q(x)，其中P(x)和Q(x)是关于自变量x的函数。$$
-      $$当Q(x) = 0时，方程y' + P(x)y = 0称为一阶线性齐次微分方程；$$
-      $$当Q(x) \\neq 0时，方程y' + P(x)y = Q(x)称为一阶线性非齐次微分方程。$$
-      $$一阶线性微分方程可以通过公式法求解。$$`,
+$$当Q(x) = 0时，方程y' + P(x)y = 0称为一阶线性齐次微分方程；$$
+$$当Q(x) \\neq 0时，方程y' + P(x)y = Q(x)称为一阶线性非齐次微分方程。$$
+$$一阶线性微分方程可以通过公式法求解。$$`,
       answer: "正确",
       difficulty: "easy",
       category: "微分方程基本概念",
@@ -492,9 +486,9 @@ const exerciseData = {
       title: "二阶常系数线性微分方程的通解",
       question: "18.若二阶常系数线性齐次微分方程$y'' + py' + qy = 0$的特征方程有一对共轭复根$\\alpha \\pm \\beta i$，则其通解形式为_______。",
       explanation: `$$解：当二阶常系数线性齐次微分方程y'' + py' + qy = 0的特征方程有一对共轭复根\\alpha \\pm \\beta i时，其通解形式为：$$
-      $$y = e^{\\alpha x}(C_1\\cos \\beta x + C_2\\sin \\beta x)$$
-      $$其中C_1和C_2为任意常数，\\alpha是复根的实部，\\beta是复根的虚部的绝对值。$$
-      $$这种情况发生在特征方程r^2 + pr + q = 0的判别式小于零时，即p^2 - 4q < 0。$$`,
+$$y = e^{\\alpha x}(C_1\\cos \\beta x + C_2\\sin \\beta x)$$
+$$其中C_1和C_2为任意常数，\\alpha是复根的实部，\\beta是复根的虚部的绝对值。$$
+$$这种情况发生在特征方程r^2 + pr + q = 0的判别式小于零时，即p^2 - 4q < 0。$$`,
       answer: "$y = e^{\\alpha x}(C_1\\cos \\beta x + C_2\\sin \\beta x)$",
       difficulty: "medium",
       category: "二阶常系数线性微分方程",
@@ -506,13 +500,13 @@ const exerciseData = {
       title: "可分离变量微分方程",
       question: "19.求解微分方程 $\\frac{dy}{dx} = e^{x-y}$",
       explanation: `$$解：$$
-      $$1. 将方程变形为标准形式：e^y dy = e^x dx$$
-      $$2. 两边积分：$$
-      $$\\int e^y dy = \\int e^x dx$$
-      $$e^y = e^x + C$$
-      $$3. 解出y：$$
-      $$y = \\ln(e^x + C)$$
-      $$这是该微分方程的通解，其中C为任意常数。$$`,
+$$1. 将方程变形为标准形式：e^y dy = e^x dx$$
+$$2. 两边积分：$$
+$$\\int e^y dy = \\int e^x dx$$
+$$e^y = e^x + C$$
+$$3. 解出y：$$
+$$y = \\ln(e^x + C)$$
+$$这是该微分方程的通解，其中C为任意常数。$$`,
       answer: "$y = \\ln(e^x + C)$，其中C为任意常数",
       difficulty: "medium",
       category: "可分离变量的微分方程",
@@ -524,19 +518,19 @@ const exerciseData = {
       title: "一阶线性微分方程",
       question: "20.求解微分方程 $xy' - y = x^2$，$x > 0$",
       explanation: `$$解：$$
-      $$1. 首先将方程整理为标准形式：$$
-      $$y' - \\frac{y}{x} = x$$
-      $$这是一阶线性微分方程，标准形式为 y' + P(x)y = Q(x)，$$
-      $$y' - \\frac{1}{x}y = x，其中 P(x) = -\\frac{1}{x}, Q(x) = x$$
-      $$2. 使用公式法求解线性微分方程：y = e^{-\\int P(x)dx} \\left(\\int Q(x)e^{\\int P(x)dx}dx + C\\right)$$
-      $$3. 代入积分：y = e^{-\\int -\\frac{1}{x} dx} \\left( \\int x e^{\\int -\\frac{1}{x} dx} dx + C \\right)$$
-      $$4. 计算积分（因为x>0，所以|x|=x）：$$
-      $$\\int -\\frac{1}{x} dx = -\\ln|x|$$
-      $$e^{-\\int -\\frac{1}{x} dx} = e^{\\ln|x|} = x$$
-      $$\\int x e^{\\int -\\frac{1}{x} dx} dx = \\int x e^{-\\ln|x|} dx = \\int x e^{\\ln|\\frac{1}{x}|} dx \\int x \\cdot \\frac{1}{x} dx = \\int 1 dx = x+C$$
-      $$5. 代入积分结果：$$
-      $$y = x\\left( x + C \\right) = x^2 + Cx$$
-      $$这是该微分方程的通解，其中C为任意常数。$$`,
+$$1. 首先将方程整理为标准形式：$$
+$$y' - \\frac{y}{x} = x$$
+$$这是一阶线性微分方程，标准形式为 y' + P(x)y = Q(x)，$$
+$$y' - \\frac{1}{x}y = x，其中 P(x) = -\\frac{1}{x}, Q(x) = x$$
+$$2. 使用公式法求解线性微分方程：y = e^{-\\int P(x)dx} \\left(\\int Q(x)e^{\\int P(x)dx}dx + C\\right)$$
+$$3. 代入积分：y = e^{-\\int -\\frac{1}{x} dx} \\left( \\int x e^{\\int -\\frac{1}{x} dx} dx + C \\right)$$
+$$4. 计算积分（因为x>0，所以|x|=x）：$$
+$$\\int -\\frac{1}{x} dx = -\\ln|x|$$
+$$e^{-\\int -\\frac{1}{x} dx} = e^{\\ln|x|} = x$$
+$$\\int x e^{\\int -\\frac{1}{x} dx} dx = \\int x e^{-\\ln|x|} dx = \\int x e^{\\ln|\\frac{1}{x}|} dx = \\int x \\cdot \\frac{1}{x} dx = \\int 1 dx = x+C$$
+$$5. 代入积分结果：$$
+$$y = x\\left( x + C \\right) = x^2 + Cx$$
+$$这是该微分方程的通解，其中C为任意常数。$$`,
       answer: "$y = x^2 + Cx$，其中C为任意常数",
       difficulty: "medium",
       category: "一阶线性微分方程",
@@ -548,14 +542,14 @@ const exerciseData = {
       title: "二阶常系数线性微分方程",
       question: "21.求解微分方程 $y'' - 4y = 0$",
       explanation: `$$解：$$
-      $$1. 写出特征方程：r^2 - 4 = 0$$
-      $$2. 求特征根：$$
-      $$r^2 = 4$$
-      $$r = \\pm 2$$
-      $$r_1 = 2, r_2 = -2$$
-      $$3. 由于有两个不同的实根，通解形式为：y = C_1e^{r_1x} + C_2e^{r_2x}$$
-      $$4. 代入特征根：y = C_1e^{2x} + C_2e^{-2x}$$
-      $$这是该微分方程的通解，其中C_1和C_2为任意常数。$$`,
+$$1. 写出特征方程：r^2 - 4 = 0$$
+$$2. 求特征根：$$
+$$r^2 = 4$$
+$$r = \\pm 2$$
+$$r_1 = 2, r_2 = -2$$
+$$3. 由于有两个不同的实根，通解形式为：y = C_1e^{r_1x} + C_2e^{r_2x}$$
+$$4. 代入特征根：y = C_1e^{2x} + C_2e^{-2x}$$
+$$这是该微分方程的通解，其中C_1和C_2为任意常数。$$`,
       answer: "$y = C_1e^{2x} + C_2e^{-2x}$，其中$C_1$和$C_2$为任意常数",
       difficulty: "medium",
       category: "二阶常系数线性微分方程",
@@ -567,17 +561,17 @@ const exerciseData = {
       title: "可分离变量的微分方程",
       question: "22.求解微分方程 $\\frac{dy}{dx} = \\frac{y}{x+1}$",
       explanation: `$$解：$$
-      $$1. 将方程变形为标准形式：\\frac{dy}{y} = \\frac{dx}{x+1}$$
-      $$2. 两边积分：$$
-      $$\\int \\frac{dy}{y} = \\int \\frac{dx}{x+1}$$
-      $$\\ln|y| = \\ln|x+1| + C_1$$
-      $$3. 两边取指数：$$
-      $$|y| = e^{\\ln|x+1| + C_1} = e^{\\ln|x+1|} \\cdot e^{C_1} = |x+1| \\cdot C_2$$
-      $$其中 C_2 = e^{C_1}$$
-      $$4. 去除绝对值符号（因为C_2可正可负）：$$
-      $$y = C(x+1)$$
-      $$其中C为任意非零常数$$
-      $$这是该微分方程的通解，其中C为任意常数。$$`,
+$$1. 将方程变形为标准形式：\\frac{dy}{y} = \\frac{dx}{x+1}$$
+$$2. 两边积分：$$
+$$\\int \\frac{dy}{y} = \\int \\frac{dx}{x+1}$$
+$$\\ln|y| = \\ln|x+1| + C_1$$
+$$3. 两边取指数：$$
+$$|y| = e^{\\ln|x+1| + C_1} = e^{\\ln|x+1|} \\cdot e^{C_1} = |x+1| \\cdot C_2$$
+$$其中 C_2 = e^{C_1}$$
+$$4. 去除绝对值符号（因为C_2可正可负）：$$
+$$y = C(x+1)$$
+$$其中C为任意非零常数$$
+$$这是该微分方程的通解，其中C为任意常数。$$`,
       answer: "$y = C(x+1)$，其中C为任意常数",
       difficulty: "easy",
       category: "可分离变量的微分方程",
@@ -589,10 +583,10 @@ const exerciseData = {
       title: "齐次微分方程的特征",
       question: "23.判断题：一阶微分方程$\\frac{dy}{dx} = f(\\frac{y}{x})$是齐次微分方程。",
       explanation: `$$解：这道题的说法是正确的。$$
-      $$一阶微分方程\\frac{dy}{dx} = f(\\frac{y}{x})满足齐次微分方程的定义。齐次微分方程的特点是，如果将方程改写为\\frac{dy}{dx} = F(x,y)的形式，则函数F(x,y)满足F(tx,ty) = F(x,y)，即F(x,y)是关于x和y的齐次函数。$$
-      $$对于\\frac{dy}{dx} = f(\\frac{y}{x})，令F(x,y) = f(\\frac{y}{x})，则有：$$
-      $$F(tx,ty) = f(\\frac{ty}{tx}) = f(\\frac{y}{x}) = F(x,y)$$
-      $$因此，这类微分方程是齐次微分方程，可以通过令u = \\frac{y}{x}进行求解。$$`,
+$$一阶微分方程\\frac{dy}{dx} = f(\\frac{y}{x})满足齐次微分方程的定义。齐次微分方程的特点是，如果将方程改写为\\frac{dy}{dx} = F(x,y)的形式，则函数F(x,y)满足F(tx,ty) = F(x,y)，即F(x,y)是关于x和y的齐次函数。$$
+$$对于\\frac{dy}{dx} = f(\\frac{y}{x})，令F(x,y) = f(\\frac{y}{x})，则有：$$
+$$F(tx,ty) = f(\\frac{ty}{tx}) = f(\\frac{y}{x}) = F(x,y)$$
+$$因此，这类微分方程是齐次微分方程，可以通过令u = \\frac{y}{x}进行求解。$$`,
       answer: "正确",
       difficulty: "medium",
       category: "齐次微分方程",
@@ -604,35 +598,33 @@ const exerciseData = {
       title: "微分方程的阶",
       question: "24.微分方程$y''' - 2y'' + y' - 3y = \\sin x$的阶是_______。",
       explanation: `$$解：微分方程的阶是指方程中未知函数的最高阶导数的阶数。$$
-      $$在微分方程y''' - 2y'' + y' - 3y = \\sin x中，最高阶导数是y'''（三阶导数），所以这个微分方程是三阶微分方程。$$`,
+$$在微分方程y''' - 2y'' + y' - 3y = \\sin x中，最高阶导数是y'''（三阶导数），所以这个微分方程是三阶微分方程。$$`,
       answer: "3",
       difficulty: "easy",
       category: "微分方程基本概念",
       method: "概念理解"
     },
-
     {
       id: 25,
       type: "计算题",
       title: "可分离变量微分方程",
       question: "25.求解微分方程 $y\\frac{dy}{dx} = x$",
       explanation: `$$解：$$
-          $$1. 将方程变形为标准形式：y dy = x dx$$
-          $$2. 两边积分：$$
-          $$\\int y dy = \\int x dx$$
-          $$\\frac{y^2}{2} = \\frac{x^2}{2} + C$$
-          $$3. 解出y：$$
-          $$y^2 = x^2 + 2C$$
-          $$y = \\pm\\sqrt{x^2 + 2C}$$
-          $$这是该微分方程的通解，其中C为任意常数。为了使表达式更简洁，可以令2C = C，得到：$$
-          $$y = \\pm\\sqrt{x^2 + C}$$
-          $$其中C为任意常数。$$`,
+$$1. 将方程变形为标准形式：y dy = x dx$$
+$$2. 两边积分：$$
+$$\\int y dy = \\int x dx$$
+$$\\frac{y^2}{2} = \\frac{x^2}{2} + C$$
+$$3. 解出y：$$
+$$y^2 = x^2 + 2C$$
+$$y = \\pm\\sqrt{x^2 + 2C}$$
+$$这是该微分方程的通解，其中C为任意常数。为了使表达式更简洁，可以令2C = C，得到：$$
+$$y = \\pm\\sqrt{x^2 + C}$$
+$$其中C为任意常数。$$`,
       answer: "$y = \\pm\\sqrt{x^2 + C}$，其中$C$为任意常数",
       difficulty: "easy",
       category: "可分离变量的微分方程",
       method: "分离变量法"
     },
-
     {
       id: 26,
       type: "选择题",
@@ -643,17 +635,17 @@ const exerciseData = {
           C. $\\frac{dy}{dx} = x + y$
           D. $\\frac{dy}{dx} = x - y$`,
       explanation: `$$解：$$
-    $$齐次微分方程的形式是 \\frac{dy}{dx} = f(\\frac{y}{x})，或者可以表示为F(x,y)，其中F(tx,ty) = F(x,y)，即F(x,y)是关于x和y的齐次函数。$$
-    $$选项分析：$$
-    $$A. \\frac{dy}{dx} = x^2 + y^2$$
-      $$设F(x,y) = x^2 + y^2，则F(tx,ty) = (tx)^2 + (ty)^2 = t^2(x^2 + y^2) = t^2F(x,y) \\neq F(x,y)，所以不是齐次微分方程。$$
-    $$B. \\frac{dy}{dx} = \\frac{x^2 + y^2}{xy}$$
-      $$设F(x,y) = \\frac{x^2 + y^2}{xy}，则F(tx,ty) = \\frac{t^2x^2 + t^2y^2}{t^2xy} = \\frac{x^2 + y^2}{xy} = F(x,y)，所以是齐次微分方程。$$
-    $$C. \\frac{dy}{dx} = x + y$$
-      $$设F(x,y) = x + y，则F(tx,ty) = tx + ty = t(x + y) = tF(x,y) \\neq F(x,y)，所以不是齐次微分方程。$$
-    $$D. \\frac{dy}{dx} = x - y$$
-      $$设F(x,y) = x - y，则F(tx,ty) = tx - ty = t(x - y) = tF(x,y) \\neq F(x,y)，所以不是齐次微分方程。$$
-    $$因此，答案是 B。$$`,
+$$齐次微分方程的形式是 \\frac{dy}{dx} = f(\\frac{y}{x})，或者可以表示为F(x,y)，其中F(tx,ty) = F(x,y)，即F(x,y)是关于x和y的齐次函数。$$
+$$选项分析：$$
+$$A. \\frac{dy}{dx} = x^2 + y^2$$
+$$设F(x,y) = x^2 + y^2，则F(tx,ty) = (tx)^2 + (ty)^2 = t^2(x^2 + y^2) = t^2F(x,y) \\neq F(x,y)，所以不是齐次微分方程。$$
+$$B. \\frac{dy}{dx} = \\frac{x^2 + y^2}{xy}$$
+$$设F(x,y) = \\frac{x^2 + y^2}{xy}，则F(tx,ty) = \\frac{t^2x^2 + t^2y^2}{t^2xy} = \\frac{x^2 + y^2}{xy} = F(x,y)，所以是齐次微分方程。$$
+$$C. \\frac{dy}{dx} = x + y$$
+$$设F(x,y) = x + y，则F(tx,ty) = tx + ty = t(x + y) = tF(x,y) \\neq F(x,y)，所以不是齐次微分方程。$$
+$$D. \\frac{dy}{dx} = x - y$$
+$$设F(x,y) = x - y，则F(tx,ty) = tx - ty = t(x - y) = tF(x,y) \\neq F(x,y)，所以不是齐次微分方程。$$
+$$因此，答案是 B。$$`,
       answer: "B",
       difficulty: "easy",
       category: "齐次微分方程",
@@ -665,17 +657,17 @@ const exerciseData = {
       title: "一阶线性微分方程",
       question: "27.求解微分方程 $\\frac{dy}{dx} + \\frac{1}{x}y = x^2$，$x > 0$",
       explanation: `$$解：$$
-        $$1. 这是一阶线性微分方程，标准形式为：\\frac{dy}{dx} + p(x)y = Q(x)$$
-          $$其中 p(x) = \\frac{1}{x}，Q(x) = x^2$$
-        $$2. 使用公式法求解线性微分方程：y = e^{-\\int P(x)dx} \\left(\\int Q(x)e^{\\int P(x)dx}dx + C\\right)$$
-        $$3. 代入积分：y = e^{-\\int \\frac{1}{x} dx} \\left( \\int x^2 e^{\\int \\frac{1}{x} dx} dx + C \\right)$$
-        $$4. 计算积分：$$
-          $$\\int \\frac{1}{x} dx = \\ln|x|$$
-          $$e^{-\\int \\frac{1}{x} dx} = e^{-\\ln|x|} = \\frac{1}{x}$$
-          $$\\int x^2 e^{\\int \\frac{1}{x} dx} dx = \\int x^2 e^{\\ln|x|} dx = \\int x^3 dx = \\frac{x^4}{4} + C$$
-        $$5. 代入积分结果：$$
-          $$y = \\frac{1}{x} \\left( \\frac{x^4}{4} + C \\right) = \\frac{x^3}{4} + \\frac{C}{x}$$
-        $$这是该微分方程的通解，其中C为任意常数，适用于x > 0的情况。$$`,
+$$1. 这是一阶线性微分方程，标准形式为：\\frac{dy}{dx} + p(x)y = Q(x)$$
+$$其中 p(x) = \\frac{1}{x}，Q(x) = x^2$$
+$$2. 使用公式法求解线性微分方程：y = e^{-\\int P(x)dx} \\left(\\int Q(x)e^{\\int P(x)dx}dx + C\\right)$$
+$$3. 代入积分：y = e^{-\\int \\frac{1}{x} dx} \\left( \\int x^2 e^{\\int \\frac{1}{x} dx} dx + C \\right)$$
+$$4. 计算积分：$$
+$$\\int \\frac{1}{x} dx = \\ln|x|$$
+$$e^{-\\int \\frac{1}{x} dx} = e^{-\\ln|x|} = \\frac{1}{x}$$
+$$\\int x^2 e^{\\int \\frac{1}{x} dx} dx = \\int x^2 e^{\\ln|x|} dx = \\int x^3 dx = \\frac{x^4}{4} + C$$
+$$5. 代入积分结果：$$
+$$y = \\frac{1}{x} \\left( \\frac{x^4}{4} + C \\right) = \\frac{x^3}{4} + \\frac{C}{x}$$
+$$这是该微分方程的通解，其中C为任意常数，适用于x > 0的情况。$$`,
       answer: "$y = \\frac{x^3}{4} + \\frac{C}{x}$，其中C为任意常数",
       difficulty: "medium",
       category: "一阶线性微分方程",
@@ -687,13 +679,13 @@ const exerciseData = {
       title: "二阶常系数线性微分方程",
       question: "28.求解微分方程 $y'' - 3y' - 4y = 0$",
       explanation: `$$解：$$
-        $$1. 写出特征方程：r^2 - 3r - 4 = 0$$
-        $$2. 求特征根：$$
-          $$r = \\frac{3 \\pm \\sqrt{9+16}}{2} = \\frac{3 \\pm \\sqrt{25}}{2} = \\frac{3 \\pm 5}{2}$$
-          $$r_1 = 4, r_2 = -1$$
-        $$3. 由于有两个不同的实根，通解形式为：y = C_1e^{r_1x} + C_2e^{r_2x}$$
-        $$4. 代入特征根：y = C_1e^{4x} + C_2e^{-x}$$
-        $$5. 这是该微分方程的通解，其中C_1和C_2为任意常数。$$`,
+$$1. 写出特征方程：r^2 - 3r - 4 = 0$$
+$$2. 求特征根：$$
+$$r = \\frac{3 \\pm \\sqrt{9+16}}{2} = \\frac{3 \\pm \\sqrt{25}}{2} = \\frac{3 \\pm 5}{2}$$
+$$r_1 = 4, r_2 = -1$$
+$$3. 由于有两个不同的实根，通解形式为：y = C_1e^{r_1x} + C_2e^{r_2x}$$
+$$4. 代入特征根：y = C_1e^{4x} + C_2e^{-x}$$
+$$5. 这是该微分方程的通解，其中C_1和C_2为任意常数。$$`,
       answer: "$y = C_1e^{4x} + C_2e^{-x}$，其中$C_1$和$C_2$为任意常数",
       difficulty: "medium",
       category: "二阶常系数线性微分方程",
@@ -705,12 +697,12 @@ const exerciseData = {
       title: "微分方程的阶",
       question: "29.若微分方程中未知函数的导数的最高阶为n，则称此方程为_______微分方程。",
       explanation: `$$解：$$
-        $$微分方程的阶是指微分方程中未知函数的导数的最高阶数。$$
-        $$例如：$$
-        $$y' = x^2 + y 是一阶微分方程，因为最高阶导数是一阶导数y'。$$
-        $$y'' + 3y' + 2y = 0 是二阶微分方程，因为最高阶导数是二阶导数y''。$$
-        $$y''' + y'' - y' + y = \\sin x 是三阶微分方程，因为最高阶导数是三阶导数y'''。$$
-        $$所以，若微分方程中未知函数的导数的最高阶为n，则称此方程为n阶微分方程。$$`,
+$$微分方程的阶是指微分方程中未知函数的导数的最高阶数。$$
+$$例如：$$
+$$y' = x^2 + y 是一阶微分方程，因为最高阶导数是一阶导数y'。$$
+$$y'' + 3y' + 2y = 0 是二阶微分方程，因为最高阶导数是二阶导数y''。$$
+$$y''' + y'' - y' + y = \\sin x 是三阶微分方程，因为最高阶导数是三阶导数y'''。$$
+$$所以，若微分方程中未知函数的导数的最高阶为n，则称此方程为n阶微分方程。$$`,
       answer: "n阶",
       difficulty: "easy",
       category: "微分方程基本概念",
@@ -722,24 +714,39 @@ const exerciseData = {
       title: "一阶线性微分方程",
       question: "30.求解微分方程 $\\frac{dy}{dx} + 2y = 4x^2$",
       explanation: `$$解：$$
-        $$1. 首先将方程整理为标准形式：$$
-          $$y' - \\frac{y}{x} = x$$
-          $$这是一阶线性微分方程，标准形式为 y' + P(x)y = Q(x)，$$
-          $$y' - \\frac{1}{x}y = x，其中 P(x) = -\\frac{1}{x}, Q(x) = x$$
-        $$2. 使用公式法求解线性微分方程：y = e^{-\\int P(x)dx} \\left(\\int Q(x)e^{\\int P(x)dx}dx + C\\right)$$
-        $$3. 代入积分：y = e^{-\\int -\\frac{1}{x} dx} \\left( \\int x e^{\\int -\\frac{1}{x} dx} dx + C \\right)$$
-        $$4. 计算积分（因为x>0，所以|x|=x）：$$
-        $$\\int -\\frac{1}{x} dx = -\\ln|x|$$
-        $$e^{-\\int -\\frac{1}{x} dx} = e^{\\ln|x|} = x$$
-        $$\\int x e^{\\int -\\frac{1}{x} dx} dx = \\int x e^{-\\ln|x|} dx = \\int x e^{\\ln|\\frac{1}{x}|} dx = \\int x \\cdot \\frac{1}{x} dx = \\int 1 dx = x+C$$
-        $$5. 代入积分结果：$$
-        $$y = x\\left( x + C \\right) = x^2 + Cx$$
-        $$这是该微分方程的通解，其中C为任意常数。$$`,
-      answer: "$y = x^2 + Cx$，其中C为任意常数",
-      difficulty: "medium",
+$$1. 首先将方程整理为标准形式：$$
+$$y' + 2y = 4x^2$$
+$$这是一阶线性微分方程，标准形式为 y' + P(x)y = Q(x)，$$
+$$其中 P(x) = 2, Q(x) = 4x^2$$
+$$2. 使用公式法求解线性微分方程：y = e^{-\\int P(x)dx} \\left(\\int Q(x)e^{\\int P(x)dx}dx + C\\right)$$
+$$3. 代入积分：y = e^{-\\int 2 dx} \\left( \\int 4x^2 e^{\\int 2 dx} dx + C \\right)$$
+$$4. 计算积分：$$
+$$\\int 2 dx = 2x$$
+$$e^{-\\int 2 dx} = e^{-2x}$$
+$$\\int 4x^2 e^{\\int 2 dx} dx = \\int 4x^2 e^{2x} dx$$
+$$= 4 \\int x^2 e^{2x} dx$$
+$$使用分部积分法：设u = x^2, dv = e^{2x}dx$$
+$$du = 2x dx, v = \\frac{1}{2}e^{2x}$$
+$$\\int x^2 e^{2x} dx = \\frac{x^2}{2}e^{2x} - \\int \\frac{1}{2}e^{2x} \\cdot 2x dx$$
+$$= \\frac{x^2}{2}e^{2x} - \\int xe^{2x} dx$$
+$$再次使用分部积分：设u = x, dv = e^{2x}dx$$
+$$du = dx, v = \\frac{1}{2}e^{2x}$$
+$$\\int xe^{2x} dx = \\frac{x}{2}e^{2x} - \\int \\frac{1}{2}e^{2x} dx$$
+$$= \\frac{x}{2}e^{2x} - \\frac{1}{4}e^{2x}$$
+$$所以：\\int x^2 e^{2x} dx = \\frac{x^2}{2}e^{2x} - (\\frac{x}{2}e^{2x} - \\frac{1}{4}e^{2x})$$
+$$= \\frac{x^2}{2}e^{2x} - \\frac{x}{2}e^{2x} + \\frac{1}{4}e^{2x}$$
+$$= \\frac{e^{2x}}{4}(2x^2 - 2x + 1)$$
+$$因此：4 \\int x^2 e^{2x} dx = e^{2x}(2x^2 - 2x + 1)$$
+$$5. 代入积分结果：$$
+$$y = e^{-2x} \\left( e^{2x}(2x^2 - 2x + 1) + C \\right)$$
+$$= 2x^2 - 2x + 1 + Ce^{-2x}$$
+$$这是该微分方程的通解，其中C为任意常数。$$`,
+      answer: "$y = 2x^2 - 2x + 1 + Ce^{-2x}$，其中C为任意常数",
+      difficulty: "hard",
       category: "一阶线性微分方程",
       method: "公式法"
     },
+
     {
       id: 31,
       type: "计算题",
@@ -1463,11 +1470,4 @@ const exerciseData = {
     };
 
 
-// Export the exercise manager
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { ExerciseManager, exerciseData };
-} else if (typeof window !== 'undefined') {
-  window.ExerciseManager = ExerciseManager;
-  window.exerciseData = exerciseData;
-}
 
